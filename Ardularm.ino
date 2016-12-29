@@ -9,14 +9,13 @@ String serverIP = "192.168.1.101";
 
 #define uchar unsigned char
 #define uint  unsigned int
-
+#define MAX_LEN 16 // maximum length of the RFID array
 uchar fifobytes;
 uchar fifoValue;
 
 boolean alarmState = false;
 
 AddicoreRFID myRFID;
-
 EthernetClient client;
 
 const int ssSD = 4; // SD slave select pin
@@ -28,11 +27,7 @@ const int NRSTPD = 5; // RFID reset pin
 const int pirPin = 7;
 //RGB diode on pin 3,6,9
 
-//Maximum length of the array
-#define MAX_LEN 16
-
 void setup() {
-  // Open serial communications and wait for port to open
   Serial.begin(9600);
   SPI.begin();
 
@@ -41,9 +36,9 @@ void setup() {
   digitalWrite(pirPin, LOW);
 
   // start RFID reader
-  pinMode(chipSelectPin, OUTPUT);              // Set digital pin 10 as OUTPUT to connect it to the RFID /ENABLE pin
-  digitalWrite(chipSelectPin, LOW);         // Activate the RFID reader
-  pinMode(NRSTPD, OUTPUT);                     // Set digital pin 10 , Not Reset and Power-down
+  pinMode(chipSelectPin, OUTPUT); // set digital pin 10 as OUTPUT to connect it to the RFID /ENABLE pin
+  digitalWrite(chipSelectPin, LOW); // activate the RFID reader
+  pinMode(NRSTPD, OUTPUT); // set digital pin 10 , not reset and power-down
   digitalWrite(NRSTPD, HIGH);
   myRFID.AddicoreRFID_Init();
 
@@ -58,8 +53,8 @@ void setup() {
   
   Serial.println("Initializing...");
   delay(5000);
-  
   printIPAddress();
+  addEntry("action=Power ON");
   Serial.println("READY");
 }
 
@@ -70,14 +65,11 @@ void loop() {
   uchar RC_size;
   uchar blockAddr;  //Selection operation block address 0 to 63
   String mynum = "";
-
   str[1] = 0x4400;
 
-  //Find tags, return tag type
-  status = myRFID.AddicoreRFID_Request(PICC_REQIDL, str);
+  status = myRFID.AddicoreRFID_Request(PICC_REQIDL, str); // find tags, return tag type
 
-  //Anti-collision, return tag serial number 4 bytes
-  status = myRFID.AddicoreRFID_Anticoll(str);
+  status = myRFID.AddicoreRFID_Anticoll(str); // anti-collision, return tag serial number 4 bytes
   if (status == MI_OK) {
     checksum1 = str[0] ^ str[1] ^ str[2] ^ str[3];
     Serial.print("The tag's number is:\t");
@@ -87,7 +79,7 @@ void loop() {
     Serial.print(" , ");
     Serial.print(str[2]);
     Serial.print(" , ");
-    Serial.println(int(str[3]));
+    Serial.println(str[3]);
 
     Serial.print("Read Checksum:\t\t");
     Serial.println(str[4]);
@@ -99,7 +91,38 @@ void loop() {
     // MasterTag detected
     if (checkMaster(sourceTag) == true) {
       Serial.println("MasterTag detected, waiting for another tag...");
-      // TO DO
+      myRFID.AddicoreRFID_Halt();
+      str[1] = 0x4400;
+      while (status == MI_OK) {
+        status = myRFID.AddicoreRFID_Request(PICC_REQIDL, str);
+        status = myRFID.AddicoreRFID_Anticoll(str);
+      }
+      delay(1000);
+      while (status != MI_OK) {
+        status = myRFID.AddicoreRFID_Request(PICC_REQIDL, str);
+        status = myRFID.AddicoreRFID_Anticoll(str);
+      }
+      
+      if (status == MI_OK) {
+        checksum1 = str[0] ^ str[1] ^ str[2] ^ str[3];
+        Serial.print("The tag's number is:\t");
+        Serial.print(str[0]);
+        Serial.print(" , ");
+        Serial.print(str[1]);
+        Serial.print(" , ");
+        Serial.print(str[2]);
+        Serial.print(" , ");
+        Serial.println(str[3]);
+        
+        Serial.print("Read Checksum:\t\t");
+        Serial.println(str[4]);
+        Serial.print("Calculated Checksum:\t");
+        Serial.println(checksum1);
+        
+        int sourceTag[] = {str[0], str[1], str[2], str[3], str[4]};
+        String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1]) + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]);
+        manageTags(data);
+      }
     }
 
     // normal Tag detected
@@ -114,7 +137,7 @@ void loop() {
         Serial.println("not trusted");
         String action = "Access DENIED";
         String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1]) + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]) + "&action=" + String(action);
-        sendData(data);
+        addEntry(data);
         Serial.println(action);
       }
     }
@@ -124,7 +147,15 @@ void loop() {
 
   myRFID.AddicoreRFID_Halt(); //Command tag into hibernation
 
-  // PIR side TO DO
+  if (alarmState == true) {
+    if (digitalRead(pirPin) == HIGH) {
+      Serial.println("BREACH!");
+      addEntry("action=BREACH");
+      delay(100);
+      sendEmail();
+      delay(5000);
+    }
+  }
 }
 
 void printIPAddress() {
@@ -139,7 +170,7 @@ void printIPAddress() {
   Serial.println();
 }
 
-void sendData(String data) {  
+void addEntry(String data) {  
   if (client.connect("192.168.1.101", 80)) {
     client.println("POST /ardularm/addEntry.php HTTP/1.1");
     client.println("Host: 192.168.1.101");
@@ -204,7 +235,7 @@ void alarmToggle(int sourceTag[]) {
   
   String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1])
     + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]) + "&action=" + String(action);
-  sendData(data);
+  addEntry(data);
   
   Serial.println("Log entered");
   client.stop();
@@ -217,3 +248,15 @@ void sendEmail() {
   client.stop();
 }
 
+void manageTags(String data) {
+  if (client.connect("192.168.1.101", 80)) {
+    client.println("POST /ardularm/manageTags.php HTTP/1.1");
+    client.println("Host: 192.168.1.101");
+    client.println("Content-Type: application/x-www-form-urlencoded");
+    client.println("Content-Length: " + String(data.length()) );
+    client.println();
+    client.println(data);
+  }
+
+  client.stop();
+}
