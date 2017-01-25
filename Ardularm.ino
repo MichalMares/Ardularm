@@ -2,10 +2,14 @@
 #include <Ethernet.h>
 #include <SPI.h>
 
-byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02};
+byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0x2E, 0x02};
 
-char server[] = "192.168.1.101";
-String serverIP = "192.168.1.101";
+char server[] = "192.168.1.103";
+String serverIP = "192.168.1.103";
+
+#define red 6
+#define green 9
+#define blue 3 
 
 #define uchar unsigned char
 #define uint  unsigned int
@@ -25,11 +29,12 @@ const int chipSelectPin = 8; // RFID slave select pin
 const int NRSTPD = 5; // RFID reset pin
 
 const int pirPin = 7;
-//RGB diode on pin 3,6,9
 
 void setup() {
   Serial.begin(9600);
   SPI.begin();
+
+  Serial.println("Initializing...");
 
   // enable PIR sensor
   pinMode(pirPin, INPUT);
@@ -51,14 +56,14 @@ void setup() {
     Serial.println("Failed to configure Ethernet using DHCP");
   }
   
-  Serial.println("Initializing...");
   delay(5000);
   printIPAddress();
   addEntry("action=Power ON");
-  Serial.println("READY");
+  Serial.println("--- READY ---");
+  Serial.println();
 }
 
-void loop() {  
+void loop() {
   uchar i, tmp, checksum1;
   uchar status;
   uchar str[MAX_LEN];
@@ -72,13 +77,11 @@ void loop() {
   status = myRFID.AddicoreRFID_Anticoll(str); // anti-collision, return tag serial number 4 bytes
   if (status == MI_OK) {
     checksum1 = str[0] ^ str[1] ^ str[2] ^ str[3];
+    
     Serial.print("The tag's number is:\t");
-    Serial.print(str[0]);
-    Serial.print(" , ");
-    Serial.print(str[1]);
-    Serial.print(" , ");
-    Serial.print(str[2]);
-    Serial.print(" , ");
+    for (int i = 0; i < 3; i++) {
+          Serial.print(String(str[i]) + ", ");
+        }
     Serial.println(str[3]);
 
     Serial.print("Read Checksum:\t\t");
@@ -91,6 +94,9 @@ void loop() {
     // MasterTag detected
     if (checkMaster(sourceTag) == true) {
       Serial.println("MasterTag detected, waiting for another tag...");
+      analogWrite(red, 0);
+      analogWrite(green, 0);
+      analogWrite(blue, 50);
       myRFID.AddicoreRFID_Halt();
       str[1] = 0x4400;
       while (status == MI_OK) {
@@ -105,13 +111,11 @@ void loop() {
       
       if (status == MI_OK) {
         checksum1 = str[0] ^ str[1] ^ str[2] ^ str[3];
+        
         Serial.print("The tag's number is:\t");
-        Serial.print(str[0]);
-        Serial.print(" , ");
-        Serial.print(str[1]);
-        Serial.print(" , ");
-        Serial.print(str[2]);
-        Serial.print(" , ");
+        for (int i = 0; i < 3; i++) {
+          Serial.print(String(str[i]) + ", ");
+        }
         Serial.println(str[3]);
         
         Serial.print("Read Checksum:\t\t");
@@ -123,6 +127,8 @@ void loop() {
         String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1]) + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]);
         manageTags(data);
       }
+
+      analogWrite(blue, 0);
     }
 
     // normal Tag detected
@@ -130,31 +136,48 @@ void loop() {
       Serial.print("Is tag trusted? ");
       boolean trusted = verifyTrusted(sourceTag);
       if (trusted == true) {
-        Serial.println("trusted");
+        Serial.println("YES");
         alarmToggle(sourceTag);
       }
       else if (trusted == false) {
-        Serial.println("not trusted");
+        Serial.println("NO");
         String action = "Access DENIED";
         String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1]) + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]) + "&action=" + String(action);
         addEntry(data);
         Serial.println(action);
       }
     }
-    Serial.println("_______________________________");
+    Serial.println("--- IDLE ---");
+    Serial.println();
     delay(500);
   }
 
   myRFID.AddicoreRFID_Halt(); //Command tag into hibernation
 
   if (alarmState == true) {
+      analogWrite(red, 50);
+      analogWrite(green, 0);
+    
     if (digitalRead(pirPin) == HIGH) {
       Serial.println("BREACH!");
       addEntry("action=BREACH");
-      delay(100);
+      delay(200);
       sendEmail();
-      delay(5000);
+      
+      while (digitalRead(pirPin) == HIGH) {
+        analogWrite(red, 50);
+        delay(100);
+        analogWrite(red, 0);
+        delay(100);       
+      }
+      Serial.println("--- IDLE ---");
+      Serial.println();
     }
+  }
+
+  if (alarmState == false) {
+    analogWrite(red, 0);
+    analogWrite(green, 50);
   }
 }
 
@@ -167,25 +190,24 @@ void printIPAddress() {
   }
   
   Serial.println();
-  Serial.println();
 }
 
 void addEntry(String data) {  
-  if (client.connect("192.168.1.101", 80)) {
+  if (client.connect(server, 80)) {
     client.println("POST /ardularm/addEntry.php HTTP/1.1");
-    client.println("Host: 192.168.1.101");
+    client.println("Host: " + serverIP);
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.println("Content-Length: " + String(data.length()) );
     client.println();
     client.println(data);
   }
-  Serial.println("Data sent");
+  Serial.println("(data sent)");
 
   client.stop();
 }
 
 boolean checkMaster(int sourceTag[]) {
-  int masterTag[] = {226, 97, 225, 231};
+  int masterTag[] = {42, 52, 108, 16}; // {226, 97, 225, 231}
   
   for (int i=0; i<4; i++) {
     if (sourceTag[i] != masterTag[i]) {
@@ -195,15 +217,19 @@ boolean checkMaster(int sourceTag[]) {
   return true;
 }
 
-boolean verifyTrusted(int sourceTag[]) {
+boolean verifyTrusted(int sourceTag[]) {  
   String request = "?uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1])
     + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]);
   
   if (client.connect(server, 80)) {
-    client.print("GET http://192.168.1.101/ardularm/verifyTrusted.php");
+    client.print("GET http://" + serverIP + "/ardularm/verifyTrusted.php");
     client.println(request);
     client.println();
     delay(250);
+  }
+  else {
+    Serial.print("DISCONNECTED-");
+    return false;
   }
 
   char response;
@@ -237,21 +263,21 @@ void alarmToggle(int sourceTag[]) {
     + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]) + "&action=" + String(action);
   addEntry(data);
   
-  Serial.println("Log entered");
+  Serial.println("(log entered)");
   client.stop();
 }
 
 void sendEmail() {
   if (client.connect(server, 80)) {
-    client.println("GET http://192.168.1.101/ardularm/sendEmail.php");
+    client.println("GET http://" + serverIP + "/ardularm/sendEmail.php");
   }
   client.stop();
 }
 
 void manageTags(String data) {
-  if (client.connect("192.168.1.101", 80)) {
+  if (client.connect(server, 80)) {
     client.println("POST /ardularm/manageTags.php HTTP/1.1");
-    client.println("Host: 192.168.1.101");
+    client.println("Host: " + serverIP);
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.println("Content-Length: " + String(data.length()) );
     client.println();
