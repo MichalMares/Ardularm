@@ -1,20 +1,21 @@
 <?php
 	include("connect.php");
-	$link = Connection();
+	$handler = Connection();
 
-	$uid1 = mysqli_real_escape_string($link, $_GET['uid1']);
-	$uid2 = mysqli_real_escape_string($link, $_GET['uid2']);
-	$uid3 = mysqli_real_escape_string($link, $_GET['uid3']);
-	$uid4 = mysqli_real_escape_string($link, $_GET['uid4']);
+	$uid1 = $_GET['uid1'];
+	$uid2 = $_GET['uid2'];
+	$uid3 = $_GET['uid3'];
+	$uid4 = $_GET['uid4'];
 
-	$query = "SELECT trusted FROM cards WHERE uid1='$uid1' AND uid2='$uid2' AND uid3='$uid3' AND uid4='$uid4';";
+	$qCheck = "SELECT * FROM cards
+		WHERE uid1=? AND uid2=? AND uid3=? AND uid4=?;";
 
-	$result = mysqli_query($link, $query);
+	$result = $handler->prepare($qCheck);
+	$result->execute(array($uid1, $uid2, $uid3, $uid4));
 
 	$output;
-	if (mysqli_num_rows($result) > 0) {
-	     // output data of each row
-	     while($row = mysqli_fetch_assoc($result)) {
+	if ($result->rowCount() != 0) {
+	     while($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	         $output = $row["trusted"];
 	     }
 	} else {
@@ -22,6 +23,4 @@
 	}
 
 	echo $output;
-
-	mysqli_close($link);
 ?>

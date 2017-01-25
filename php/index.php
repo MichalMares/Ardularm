@@ -1,10 +1,9 @@
 <?php
 	include("connect.php");
-	$link = Connection();
+	$handler = Connection();
 
 	$query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id ORDER BY time DESC;";
-
-	$result = mysqli_query($link, $query);
+	$result = $handler->query($query);
 ?>
 
 <html>
@@ -54,7 +53,7 @@
 		</tr>
 		<?php
 			if ($result!==FALSE) {
-				while ($row = mysqli_fetch_array($result)) {
+				while ($row = $result->fetch()) {
 					echo "<tr>
 		        		<td> {$row['time']} </td>
 	        			<td> {$row['action']} </td>
@@ -66,8 +65,6 @@
 	        			<td> {$row['uid4']} </td>
 	        		</tr>";
 			    }
-			    mysqli_free_result($result);
-			    mysqli_close($link);
 			}
 	    ?>
     </table>

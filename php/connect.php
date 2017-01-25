@@ -1,17 +1,15 @@
 <?php
 	function Connection() {
-		$servername = "***";
-		$username = "***";
-		$password = "***";
-		$dbname = "***";
+		$dsn = "mysql:dbname=ardularm;host=localhost";
+		$user = "root";
+		$password = "";
 
-		// Create connection
-		$link = mysqli_connect($servername, $username, $password, $dbname);
-		// Check connection
-		if (!$link) {
-		     die("Connection failed: " . mysqli_connect_error());
+		try {
+		    $handler = new PDO($dsn, $user, $password);
+		} catch (PDOException $e) {
+		    echo 'Connection failed: ' . $e->getMessage();
 		}
 
-		return $link;
+		return $handler;
 	}
 ?>

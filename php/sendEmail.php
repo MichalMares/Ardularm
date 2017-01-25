@@ -1,9 +1,9 @@
 <?php
 	include("connect.php");
-	$link = Connection();
+	$handler = Connection();
 
-	$to      = '*****@*****.***';
-	$subject = 'Alarm Breached!';
+	$to      = 'mamivaji@seznam.cz';
+	$subject = 'Alarm Breached';
 	$message = '
 		Dear user,
 
@@ -14,7 +14,7 @@
 
 		THIS EMAIL IS GENERATED ATOMATICALLY, DO NOT REPLY
 	';
-	$headers = 'From: ardularm@github.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
+	$headers = 'From: ardularm.github.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
 	mail($to, $subject, $message, $headers);
 
