@@ -7,10 +7,6 @@ char server[] = "*****.com";
 String key = "*****"; // password for running PHP scripts
 boolean alarmState = false;
 
-/* Unsigned long variables are extended size variables for number storage, and
-store 32 bits (4 bytes). Unlike standard longs unsigned longs won't store
-negative numbers, making their range from 0 to 4,294,967,295 (2^32 - 1). This
-means it can run for around 49 days before the varable overflows. */
 unsigned long previousMillis = 0; // will store last time of checking the server
 const long interval = 30000; // interval at which to blink (milliseconds)
 
@@ -69,7 +65,7 @@ void setup() {
 }
 
 void loop() {
-  uchar i, tmp;
+  uchar i, tmp; //, checksum1;
   uchar status;
   uchar str[MAX_LEN];
   uchar RC_size;
@@ -157,7 +153,9 @@ void loop() {
     led(0,50,0);
   }
 }
-
+/**
+ * Default Arduino fuction for printing device IP address.
+ */
 void printIPAddress() {
   Serial.print("My IP address: ");
 
@@ -169,9 +167,13 @@ void printIPAddress() {
   Serial.println();
 }
 
-// this method checks, if the tag read is a Master Tag
+/**
+ * This method compares read tag with pre-set MasterTag.
+ * @param  sourceTag Array of UIDs of the read tag
+ * @return           Returns true when they agree and false when they differ
+ */
 boolean checkMaster(int sourceTag[]) {
-  int masterTag[] = {42, 52, 108, 16};
+  int masterTag[] = {***, ***, ***, ***};
 
   for (int i=0; i<4; i++) {
     if (sourceTag[i] != masterTag[i]) {
@@ -181,6 +183,11 @@ boolean checkMaster(int sourceTag[]) {
   return true;
 }
 
+/**
+ * This method runs the manageState.php script on the server and either "gets"
+ * a value from database, or "chages" the database entry.
+ * @param option Either "get" or "change", option is then passed on to the manageState.php
+ */
 void manageState(String option) {
   String data = "option=" + option;
   if (option == "get") {
@@ -196,7 +203,9 @@ void manageState(String option) {
   }
 }
 
-// toggles the Alarm State and calls server script to add entry to the log
+/**
+ * This method toggles the alarmState value and adds an entry into the database.
+ */
 void alarmToggle(int sourceTag[]) {
   alarmState = !alarmState;
 
@@ -215,6 +224,11 @@ void alarmToggle(int sourceTag[]) {
   post("addEntry", data);
 }
 
+/**
+ * This method sends UIDs to the verifyTrusted.php script which checks the database.
+ * @param  sourceTag Array of UIDs of the read tag
+ * @return           Returns true when it is trusted, false when not trusted
+ */
 boolean verifyTrusted(int sourceTag[]) {
   String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1])
     + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]);
@@ -228,6 +242,12 @@ boolean verifyTrusted(int sourceTag[]) {
   }
 }
 
+/**
+ * This method calls corresponding script on the server via POST request
+ * @param  page The name of the script without the ".php" suffix
+ * @param  data String to be sent as data for the script
+ * @return      Returns the response of the server
+ */
 String post(String page, String data) {
   data += "&key=" + key;
   String response;
@@ -252,6 +272,10 @@ String post(String page, String data) {
   return response;
 }
 
+/**
+ * This method looks for script's response enclosed within "<" and ">"
+ * @return Returns the response of the server
+ */
 String getResponse() {
   String output = "";
   boolean insideResp = false;
@@ -277,12 +301,22 @@ String getResponse() {
   return output = "ERROR: Response not found";
 }
 
+/**
+ * This method lights the LED with corresponding color.
+ * @param redVal   Brightness value for the red value of diode
+ * @param greenVal Brightness value for the green value of diode
+ * @param blueVal  Brightness value for the blue value of diode
+ */
 void led(int redVal, int greenVal, int blueVal) {
   analogWrite(red, redVal);
   analogWrite(green, greenVal);
   analogWrite(blue, blueVal);
 }
 
+/**
+ * Prints the UIDs of the tag into the Serial
+ * @param sourceTag Array of UIDs of the read tag
+ */
 void readTag(int sourceTag[]) {
   uchar checksum = sourceTag[0] ^ sourceTag[1] ^ sourceTag[2] ^ sourceTag[3];
 
