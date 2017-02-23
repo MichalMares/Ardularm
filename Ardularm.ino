@@ -3,7 +3,7 @@
 #include <SPI.h>
 
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0x2E, 0x02};
-char server[] = "*****";
+char server[] = "*****.com";
 String key = "*****"; // password for running PHP scripts
 boolean alarmState = false;
 
@@ -69,7 +69,7 @@ void setup() {
 }
 
 void loop() {
-  uchar i, tmp, checksum1;
+  uchar i, tmp;
   uchar status;
   uchar str[MAX_LEN];
   uchar RC_size;
@@ -78,22 +78,9 @@ void loop() {
   str[1] = 0x4400;
 
   status = myRFID.AddicoreRFID_Request(PICC_REQIDL, str); // find tags, return tag type
-
   status = myRFID.AddicoreRFID_Anticoll(str); // anti-collision, return tag serial number 4 bytes
+
   if (status == MI_OK) {
-    checksum1 = str[0] ^ str[1] ^ str[2] ^ str[3];
-
-    Serial.print("The tag's number is:\t");
-    for (int i = 0; i < 3; i++) {
-      Serial.print(String(str[i]) + ", ");
-    }
-    Serial.println(str[3]);
-
-    Serial.print("Read Checksum:\t\t");
-    Serial.println(str[4]);
-    Serial.print("Calculated Checksum:\t");
-    Serial.println(checksum1);
-
     int sourceTag[] = {str[0], str[1], str[2], str[3], str[4]};
 
     // MasterTag handling
@@ -113,20 +100,9 @@ void loop() {
       }
 
       if (status == MI_OK) {
-        checksum1 = str[0] ^ str[1] ^ str[2] ^ str[3];
-
-        Serial.print("The tag's number is:\t");
-        for (int i = 0; i < 3; i++) {
-          Serial.print(String(str[i]) + ", ");
-        }
-        Serial.println(str[3]);
-
-        Serial.print("Read Checksum:\t\t");
-        Serial.println(str[4]);
-        Serial.print("Calculated Checksum:\t");
-        Serial.println(checksum1);
-
         int sourceTag[] = {str[0], str[1], str[2], str[3], str[4]};
+        readTag(sourceTag);
+
         String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1]) + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]);
         post("manageTags", data);
       }
@@ -134,6 +110,7 @@ void loop() {
 
     // normal Tag detected
     else {
+      readTag(sourceTag);
       led(50,50,0);
       Serial.print("Is tag trusted? ");
       boolean trusted = verifyTrusted(sourceTag);
@@ -146,18 +123,19 @@ void loop() {
         post("addEntry", data);
       }
     }
-    Serial.println("--- IDLE ---");
     Serial.println();
     delay(500);
   }
 
   myRFID.AddicoreRFID_Halt(); //Command tag into hibernation
 
+  // check server for state if the interval has passed
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis; // save the last time you checked server
     manageState("get"); // synchronizes the state with server
   }
+
   if (alarmState == true) {
     led(50,0,0);
 
@@ -303,4 +281,19 @@ void led(int redVal, int greenVal, int blueVal) {
   analogWrite(red, redVal);
   analogWrite(green, greenVal);
   analogWrite(blue, blueVal);
+}
+
+void readTag(int sourceTag[]) {
+  uchar checksum = sourceTag[0] ^ sourceTag[1] ^ sourceTag[2] ^ sourceTag[3];
+
+  Serial.print("The tag's number is:\t");
+  for (int i = 0; i < 3; i++) {
+    Serial.print(String(sourceTag[i]) + ", ");
+  }
+  Serial.println(sourceTag[3]);
+
+  Serial.print("Read Checksum:\t\t");
+  Serial.println(sourceTag[4]);
+  Serial.print("Calculated Checksum:\t");
+  Serial.println(checksum);
 }
