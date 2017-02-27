@@ -1,11 +1,19 @@
 <?php
-	include('../config.php');
-	include('../authenticate.php');
+	include("../config.php");
+	include("../authenticate.php");
+	include("../connect.php");
+	$handler = Connection();
 
-	$key = $_POST['key'];
+	echo date("Y-m-d")."<br />";
+	echo date('Y-m-d', strtotime('-7 days'));
+
+	//$key = $_GET['key'];
 	if (Authenticate($key)) {
 		require '../PHPMailer/PHPMailerAutoload.php';
 		$mail = new PHPMailer;
+
+	  $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id WHERE time BETWEEN '" . $dateFrom . "' AND '" . $dateTo . "' ORDER BY time DESC;";
+	  $result = $handler->query($query);
 
 		$mail->isSMTP();
 		$mail->Host = $mailHost;
@@ -19,7 +27,7 @@
 		$mail->addAddress($mailaddAddressAddress, $mailaddAddressName);
 		$mail->isHTML(true);
 
-		$mail->Subject = 'Area Compromised';
+		$mail->Subject = 'Weekly Summary';
 		$mail->Body    = 'Hello,<br>
 			<br>
 			there are thieves in your home, get your gun and act quickly!<br>
@@ -42,6 +50,6 @@
 	}
 
 	else {
-		header('Location: ../index.php');
+		header("Location: ../index.php");
 	}
 ?>

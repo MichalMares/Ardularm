@@ -1,14 +1,13 @@
 <?php
+
 	/**
 	 * This function establishes connection with the database.
 	 *
 	 * @return [object] $handler Returns a connection
 	 */
 	function Connection() {
-		$dsn = "mysql:***;host=***.com:****";
-		$user = "****";
-		$password = "****";
-
+		include("config.php");
+		
 		try {
 			$handler = new PDO($dsn, $user, $password);
 		} catch (PDOException $e) {

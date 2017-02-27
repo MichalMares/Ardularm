@@ -5,8 +5,8 @@
 	 * @param [type] $input Key sent by Arduino
 	 */
 	function Authenticate($input) {
-		$key = "****";
-
+		include("config.php");
+		
 		if ($key == $input) {
 			return true;
 		}
