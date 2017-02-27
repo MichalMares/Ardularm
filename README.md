@@ -25,4 +25,4 @@ To run this project on your own, there are a few steps necessary:
 
 ## License
 
-See LICENSE.txt
+[MIT](https://github.com/MichalMares/Ardularm/blob/arduino/LICENSE.txt) @ [Michal Mareš](https://github.com/MichalMares)
