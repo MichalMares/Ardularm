@@ -1,4 +1,11 @@
 <?php
+	/**
+	 * @file addEntry.php
+	 * @Author Michal Mareš
+	 * @date March, 2017
+	 * @brief This script adds an entry with a message into the database.
+	 */
+
 	include("../authenticate.php");
 	include("../connect.php");
 	$handler = Connection();

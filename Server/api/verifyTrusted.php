@@ -1,4 +1,11 @@
 <?php
+	/**
+	* @file verifyTrusted.php
+	* @Author Michal Mareš
+	* @date March, 2017
+	* @brief This script verifies, if the tag sent by Arduino is set as trusted in database.
+	*/
+
 	include("../authenticate.php");
 	include("../connect.php");
 	$handler = Connection();

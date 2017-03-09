@@ -1,7 +1,7 @@
 body {
   font-family: 'Noto Sans', serif;
-  color: #71f525;
-  background-color: #000000;
+  color: white;
+  background-color: #008184;
 }
 .log, .log th, .log td {
   border: 1px solid #ddd;
@@ -13,8 +13,8 @@ body {
   width: 100%;
 }
 .log tr:hover {
-  background-color: #202020;
+  background-color: #00979C;
 }
 .log th {
-  background-color: #202020;
+  background-color: #00979C;
 }

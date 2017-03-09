@@ -1,4 +1,11 @@
 <?php
+	/**
+	 * @file manageState.php
+	 * @Author Michal Mareš
+	 * @date March, 2017
+	 * @brief This script toggles the state of the alarm.
+	 */
+
 	include("../authenticate.php");
 	include("../connect.php");
 	$handler = Connection();

@@ -1,4 +1,11 @@
 <?php
+	/**
+	 * @file manageTags.php
+	 * @Author Michal Mareš
+	 * @date March, 2017
+	 * @brief This script changes, whether the tag is or is not trusted.
+	 */
+
 	include("../authenticate.php");
 	include("../connect.php");
 	$handler = Connection();

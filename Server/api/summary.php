@@ -1,19 +1,24 @@
 <?php
+	/**
+	 * @file summary.php
+	 * @Author Michal Mareš
+	 * @date March, 2017
+	 * @brief This script sends a link with overview of last week's activities.
+	 */
+
 	include("../config.php");
 	include("../authenticate.php");
 	include("../connect.php");
 	$handler = Connection();
 
-	echo date("Y-m-d")."<br />";
-	echo date('Y-m-d', strtotime('-7 days'));
+	$dateFrom = date("Y-m-d");
+	$dateTo = date('Y-m-d', strtotime('-7 days'));
+	$link = $domain . '/index.php?dateFrom=' . $dateFrom . '&dateTo=' . $dateTo;
 
-	//$key = $_GET['key'];
+	$key = $_GET['key'];
 	if (Authenticate($key)) {
 		require '../PHPMailer/PHPMailerAutoload.php';
 		$mail = new PHPMailer;
-
-	  $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id WHERE time BETWEEN '" . $dateFrom . "' AND '" . $dateTo . "' ORDER BY time DESC;";
-	  $result = $handler->query($query);
 
 		$mail->isSMTP();
 		$mail->Host = $mailHost;
@@ -30,12 +35,12 @@
 		$mail->Subject = 'Weekly Summary';
 		$mail->Body    = 'Hello,<br>
 			<br>
-			there are thieves in your home, get your gun and act quickly!<br>
+			You can view your action summary for the past week <a href="' . $link . '">here</a>.<br>
 			<br>
 			Your Ardularm';
 		$mail->AltBody = 'Hello,
 
-			there are thieves in your home, get your gun and act quickly!
+			This is your action summary for the past week. To view this, you have to open HTML version of this email.
 
 			Your Ardularm';
 

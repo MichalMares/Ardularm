@@ -1,4 +1,11 @@
 <?php
+	/**
+	 * @file index.php
+	 * @Author Michal Mareš
+	 * @date March, 2017
+	 * @brief This script enables the user to see entries in database.
+	 */
+
 	include("connect.php");
 	$handler = Connection();
 
@@ -32,20 +39,21 @@
 <body>
 	<h1>Ardularm log</h1>
 	<?php
-		$dateFrom = $_POST['dateFrom'];
-		$dateTo = $_POST['dateTo'];
-		$refresh = $_POST['refresh'];
+		$dateFrom = $_GET['dateFrom'];
+		$dateTo = $_GET['dateTo'];
+		$refresh = $_GET['refresh'];
 	?>
 
-	<form action="index.php" method="post">
+	<form action="index.php" method="get">
 		View entries from
 		<input type="text" name="dateFrom" id="dateFrom" size="12"
-			placeholder="YYYY-MM-DD" value="<?php echo $_POST['dateFrom'];?>">
+			placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateFrom'];?>">
 		to
 		<input type="text" name="dateTo" id="dateTo" size="12"
-			placeholder="YYYY-MM-DD" value="<?php echo $_POST['dateTo'];?>">
+			placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateTo'];?>">
 		<input type="submit" value="Search">
 	</form>
+	<p>Showing last 50 entries</p>
 
 	<?php
 		if ( !(empty($dateFrom)) && !(empty($dateTo)) ) {

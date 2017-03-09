@@ -1,18 +1,25 @@
+/**
+ * @file Ardularm.ino
+ * @Author Michal Mareš
+ * @date March, 2017
+ * @brief This is the code running on Arduino unit.
+ */
+
 #include <AddicoreRFID.h>
 #include <Ethernet.h>
 #include <SPI.h>
 
-// these variables need to be set by user
+// user-configurable
+char server[] = "domain.tld";   // domain name
+String key = "key";             // password for running PHP scripts
+
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0x2E, 0x02};
-char server[] = "*****.com";
-String key = "*****"; // password for running PHP scripts
-int masterTag[] = {***, ***, ***, ***};
-
 boolean alarmState = false;
-unsigned long previousMillis = 0; // will store last time of checking the server
-const long interval = 30000; // interval at which to blink (milliseconds)
 
-// LED variables
+unsigned long previousMillis = 0; // will store last time of checking the server
+const long interval = 30000; // interval at which to act (in milliseconds)
+
+// RGB LED pins
 #define red 6
 #define green 9
 #define blue 3
@@ -45,7 +52,7 @@ void setup() {
 
   // start RFID reader
   pinMode(chipSelectPin, OUTPUT); // set digital pin 8 as OUTPUT to connect it to the RFID /ENABLE pin
-  digitalWrite(chipSelectPin, LOW); // activate the RFID reader
+  digitalWrite(chipSelectPin, LOW);
   pinMode(NRSTPD, OUTPUT); // set digital pin 5 , not reset and power-down
   digitalWrite(NRSTPD, HIGH);
   myRFID.AddicoreRFID_Init();
@@ -67,11 +74,11 @@ void setup() {
 }
 
 void loop() {
-  uchar i, tmp; //, checksum1;
+  uchar i, tmp;
   uchar status;
   uchar str[MAX_LEN];
   uchar RC_size;
-  uchar blockAddr;  //Selection operation block address 0 to 63
+  uchar blockAddr;  // Selection operation block address 0 to 63
   String mynum = "";
   str[1] = 0x4400;
 
@@ -81,7 +88,7 @@ void loop() {
   if (status == MI_OK) {
     int sourceTag[] = {str[0], str[1], str[2], str[3], str[4]};
 
-    // MasterTag handling
+    // MasterTag detected
     if (checkMaster(sourceTag) == true) {
       Serial.println("MasterTag detected, waiting for another tag...");
       led(0,0,50);
@@ -106,7 +113,7 @@ void loop() {
       }
     }
 
-    // normal Tag detected
+    // normal tag detected
     else {
       readTag(sourceTag);
       led(50,50,0);
@@ -125,7 +132,7 @@ void loop() {
     delay(500);
   }
 
-  myRFID.AddicoreRFID_Halt(); //Command tag into hibernation
+  myRFID.AddicoreRFID_Halt(); // Command tag into hibernation
 
   // check server for state if the interval has passed
   unsigned long currentMillis = millis();
@@ -134,6 +141,7 @@ void loop() {
     manageState("get"); // synchronizes the state with server
   }
 
+  // check PIR sensor
   if (alarmState == true) {
     led(50,0,0);
 
@@ -144,9 +152,9 @@ void loop() {
 
       while (digitalRead(pirPin) == HIGH) {
         led(50,0,0);
-        delay(50);
+        delay(100);
         led(0,0,0);
-        delay(50);
+        delay(100);
       }
     }
   }
@@ -176,6 +184,8 @@ void printIPAddress() {
  * @return           Returns true when they agree and false when they differ
  */
 boolean checkMaster(int sourceTag[]) {
+  int masterTag[] = {42, 52, 108, 16};
+
   for (int i=0; i<4; i++) {
     if (sourceTag[i] != masterTag[i]) {
       return false;
@@ -254,7 +264,7 @@ String post(String page, String data) {
   String response;
 
   if (client.connect(server, 80)) {
-    client.println("POST /api/" + page + ".php HTTP/1.1");
+    client.println("POST /" + page + ".php HTTP/1.1");
     client.println("Host: " + String(server));
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.println("Content-Length: " + String(data.length()) );

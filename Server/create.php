@@ -1,5 +1,12 @@
 <?php
-  include('connect.php');
+  /**
+   * @file create.php
+   * @Author Michal Mareš
+   * @date March, 2017
+   * @brief This script creates necessary tables in database to run Ardularm.
+   */
+  
+  include("connect.php");
   $handler = Connection();
 
   $query = "
@@ -39,6 +46,6 @@
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
     ";
 
-  $handler->exec($query);
+  $handler->exec($query); // what if they are already created?
   echo "Tables created successfully. DELETE this file for safety reasons!";
 ?>
