@@ -6,9 +6,9 @@
 	 * @brief This script sends a link with overview of last week's activities.
 	 */
 
-	include("../config.php");
 	include("../authenticate.php");
 	include("../connect.php");
+	include("../config.php");
 	$handler = Connection();
 
 	$dateFrom = date("Y-m-d");
@@ -45,10 +45,10 @@
 			Your Ardularm';
 
 		if(!$mail->send()) {
-			echo '<Message could not be sent.>';
+			echo '{ERROR: Email not sent}';
 			echo 'Mailer Error: ' . $mail->ErrorInfo;
 		} else {
-			echo '<OK; message has been sent>';
+			echo '{Email sent}';
 		}
 
 		$query = $handler->query("INSERT INTO logs (action) VALUES ('Message has been sent');");

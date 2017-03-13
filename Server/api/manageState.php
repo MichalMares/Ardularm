@@ -21,8 +21,8 @@
 			$row = $result->fetch(PDO::FETCH_ASSOC);
 			$output = $row['value']; // now output is 1 or 0
 
-			if ($option == "get") {
-				echo "<OK; alarmState=" . $output . ">";
+			if ($option == "sync") {
+				echo "{Sync: alarmState=" . $output . "}";
 			}
 
 			else if ($option == "change") {
@@ -35,7 +35,7 @@
 					$value = 1;
 				}
 				$change->execute(array($value));
-				echo "<OK; changed to alarmState=" . $value . ">";
+				echo "{Change: alarmState=" . $value . "}";
 			}
 		}
 	}

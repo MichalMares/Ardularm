@@ -35,8 +35,8 @@
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="index.php">Domů</a></li>
-              <li><a href="docs.php">Dokumentace</a></li>
+              <li><a href="index.php">Domů</a></li>
+              <li class="active"><a href="docs.php">Dokumentace</a></li>
               <li><a href="dashboard.php">Uživatel</a></li>
             </ul>
           </div><!--/.nav-collapse -->
@@ -45,8 +45,11 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h1>Ardularm</h1>
-        <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+        <h1>Arduino</h1>
+        <p>Část, která je programována na Arduinu.</p>
+        <br>
+        <h1>Server</h1>
+        <p>Serverová část v PHP.</p>
       </div>
 
     </div> <!-- /container -->

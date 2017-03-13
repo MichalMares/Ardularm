@@ -18,7 +18,7 @@
 
 	if (Authenticate($key)) {
 		$qCheck = "SELECT * FROM cards
-		WHERE uid1=? AND uid2=? AND uid3=? AND uid4=?;";
+			WHERE uid1=? AND uid2=? AND uid3=? AND uid4=?;";
 
 		$result = $handler->prepare($qCheck);
 		$result->execute(array($uid1, $uid2, $uid3, $uid4));
@@ -30,7 +30,7 @@
 			$output = 0;
 		}
 
-		echo "<OK; tag=" . $output . ">";
+		echo "{trusted=" . $output . "}";
 	}
 
 	else {

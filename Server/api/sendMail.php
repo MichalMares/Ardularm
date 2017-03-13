@@ -6,8 +6,10 @@
 	 * @brief This script sends an email about detected breach.
 	 */
 
-	include('../authenticate.php');
-	include('../config.php');
+	include("../authenticate.php");
+	include("../connect.php");
+	include("../config.php");
+	$handler = Connection();
 
 	require '../PHPMailer/PHPMailerAutoload.php';
 	$mail = new PHPMailer;
@@ -50,10 +52,10 @@
 			Your Ardularm';
 
 		if(!$mail->send()) {
-			echo '<Message could not be sent.>';
+			echo '{ERROR: Email not sent}';
 			echo 'Mailer Error: ' . $mail->ErrorInfo;
 		} else {
-			echo '<OK; message has been sent>';
+			echo '{Email sent}';
 		}
 
 		$query = $handler->query("INSERT INTO logs (action) VALUES ('Message has been sent');");

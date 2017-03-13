@@ -5,7 +5,7 @@
    * @date March, 2017
    * @brief This script creates necessary tables in database to run Ardularm.
    */
-  
+
   include("connect.php");
   $handler = Connection();
 
@@ -15,9 +15,9 @@
     SET foreign_key_checks = 0;
     SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-    CREATE TABLE `cards` (
+    CREATE TABLE IF NOT EXISTS `cards` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
-      `trusted` bit(1) DEFAULT b'0',
+      `trusted` tinyint(1) DEFAULT '0',
       `uid1` tinyint(3) unsigned NOT NULL,
       `uid2` tinyint(3) unsigned NOT NULL,
       `uid3` tinyint(3) unsigned NOT NULL,
@@ -27,7 +27,7 @@
       UNIQUE KEY `unique_id` (`uid1`,`uid2`,`uid3`,`uid4`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-    CREATE TABLE `logs` (
+    CREATE TABLE IF NOT EXISTS `logs` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
       `card_id` int(11) DEFAULT NULL,
@@ -36,14 +36,13 @@
       KEY `card_id` (`card_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-    CREATE TABLE `settings` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      `card_id` int(11) DEFAULT NULL,
-      `action` text COLLATE utf8_bin NOT NULL,
-      PRIMARY KEY (`id`),
-      KEY `card_id` (`card_id`)
+    CREATE TABLE IF NOT EXISTS `settings` (
+      `setting` text COLLATE utf8_bin NOT NULL,
+      `value` tinyint(1) NOT NULL DEFAULT '0'
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+    INSERT INTO `settings` (`setting`, `value`) VALUES
+    ('alarmState', 0);
     ";
 
   $handler->exec($query); // what if they are already created?

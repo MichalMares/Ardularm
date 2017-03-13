@@ -10,12 +10,12 @@
 #include <SPI.h>
 
 // user-configurable
-char server[] = "domain.tld";   // domain name
-String key = "key";             // password for running PHP scripts
-
+char server[] = "ardularm.forgotitsmonday.com"; // domain name
+String key = "d=Ym!L259"; // password for running PHP scripts
+int masterTag[] = {42, 52, 108, 16}; // UIDs of the MasterTag
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0x2E, 0x02};
-boolean alarmState = false;
 
+boolean alarmState = false;
 unsigned long previousMillis = 0; // will store last time of checking the server
 const long interval = 30000; // interval at which to act (in milliseconds)
 
@@ -88,8 +88,8 @@ void loop() {
   if (status == MI_OK) {
     int sourceTag[] = {str[0], str[1], str[2], str[3], str[4]};
 
-    // MasterTag detected
-    if (checkMaster(sourceTag) == true) {
+    // MasterTag detected and alarm is not on
+    if (checkMaster(sourceTag) == true && alarmState == false) {
       Serial.println("MasterTag detected, waiting for another tag...");
       led(0,0,50);
       myRFID.AddicoreRFID_Halt();
@@ -138,7 +138,7 @@ void loop() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis; // save the last time you checked server
-    manageState("get"); // synchronizes the state with server
+    manageState("sync"); // synchronizes the state with server
   }
 
   // check PIR sensor
@@ -184,8 +184,6 @@ void printIPAddress() {
  * @return           Returns true when they agree and false when they differ
  */
 boolean checkMaster(int sourceTag[]) {
-  int masterTag[] = {42, 52, 108, 16};
-
   for (int i=0; i<4; i++) {
     if (sourceTag[i] != masterTag[i]) {
       return false;
@@ -201,9 +199,9 @@ boolean checkMaster(int sourceTag[]) {
  */
 void manageState(String option) {
   String data = "option=" + option;
-  if (option == "get") {
+  if (option == "sync") {
     String response = post("manageState", data);
-    if (response == "OK; alarmState=1") {
+    if (response == "Sync: alarmState=1") {
       alarmState = true;
     } else {
       alarmState = false;
@@ -246,7 +244,7 @@ boolean verifyTrusted(int sourceTag[]) {
 
   String response = post("verifyTrusted", data);
 
-  if (response == "OK; tag=1") {
+  if (response == "trusted=1") {
     return true;
   } else {
     return false;
@@ -264,7 +262,7 @@ String post(String page, String data) {
   String response;
 
   if (client.connect(server, 80)) {
-    client.println("POST /" + page + ".php HTTP/1.1");
+    client.println("POST /api/" + page + ".php HTTP/1.1");
     client.println("Host: " + String(server));
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.println("Content-Length: " + String(data.length()) );
@@ -294,13 +292,13 @@ String getResponse() {
   for (int i = 0; i < 25000; i++) { // allows maximum message length X chars, can be changed if needed
     if (client.available()) {
       char c = client.read();
-      String str(c);
+      String str = String(c);
 
-      if (str == "<") {
+      if (str == "{") {
         insideResp = true;
       }
       else if (insideResp == true) {
-        if (str != ">") {
+        if (str != "}") {
           output += str;
         }
         else {

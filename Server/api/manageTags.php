@@ -64,7 +64,7 @@
 			$qLog->execute(array($action));
 		}
 
-		echo "<" . $action . ">";
+		echo "{" . $action . "}";
 	}
 
 	else {
