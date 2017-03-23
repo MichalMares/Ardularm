@@ -3,44 +3,39 @@
 	 * @file manageState.php
 	 * @Author Michal Mareš
 	 * @date March, 2017
-	 * @brief This script toggles the state of the alarm.
+	 * @brief Toggles the state of the alarm.
 	 */
 
 	include("../authenticate.php");
 	include("../connect.php");
+	include("../config.php");
 	$handler = Connection();
+	Authenticate();
 
-	$key = $_POST['key'];
 	$option = $_POST['option'];
 
-	if (Authenticate($key)) {
-		$qCheck = "SELECT * FROM settings WHERE setting='alarmState';";
-		$result = $handler->query($qCheck);
+	$qCheck = "SELECT * FROM settings WHERE setting='alarmState';";
+	$result = $handler->query($qCheck); // find alarmState in the db
 
-		if ($result->rowCount() == 1) {
-			$row = $result->fetch(PDO::FETCH_ASSOC);
-			$output = $row['value']; // now output is 1 or 0
+	if ($result->rowCount() == 1) {
+		$row = $result->fetch(PDO::FETCH_ASSOC);
+		$output = $row['value']; // get alarmState value
 
-			if ($option == "sync") {
-				echo "{Sync: alarmState=" . $output . "}";
-			}
-
-			else if ($option == "change") {
-				$query = "UPDATE settings SET value=? WHERE setting='alarmState';";
-				$change = $handler->prepare($query);
-				if ($output == 1) {
-					$value = 0;
-				}
-				else if ($output == 0) {
-					$value = 1;
-				}
-				$change->execute(array($value));
-				echo "{Change: alarmState=" . $value . "}";
-			}
+		if ($option == "sync") { // if Arduino wants to synchronize
+			echo "{Sync: alarmState=" . $output . "}"; // return current state back to Arduino
 		}
-	}
 
-	else {
-		header("Location: ../index.php");
+		else if ($option == "change") { // if Arduino wants to change the state
+			$query = "UPDATE settings SET value=? WHERE setting='alarmState';";
+			$change = $handler->prepare($query);
+			if ($output == 1) {
+				$value = 0;
+			}
+			else if ($output == 0) {
+				$value = 1;
+			}
+			$change->execute(array($value));
+			echo "{Change: alarmState=" . $value . "}"; // confirm the change to the Arduino
+		}
 	}
 ?>

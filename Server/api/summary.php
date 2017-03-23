@@ -3,58 +3,52 @@
 	 * @file summary.php
 	 * @Author Michal Mareš
 	 * @date March, 2017
-	 * @brief This script sends a link with overview of last week's activities.
+	 * @brief Sends a link with overview of last week's activities.
 	 */
 
 	include("../authenticate.php");
 	include("../connect.php");
 	include("../config.php");
 	$handler = Connection();
+	Authenticate();
 
 	$dateFrom = date("Y-m-d");
 	$dateTo = date('Y-m-d', strtotime('-7 days'));
-	$link = $domain . '/index.php?dateFrom=' . $dateFrom . '&dateTo=' . $dateTo;
+	$link = CONFIG::domain . '/dash.php?dateFrom=' . $dateFrom . '&dateTo=' . $dateTo;
 
-	$key = $_GET['key'];
-	if (Authenticate($key)) {
-		require '../PHPMailer/PHPMailerAutoload.php';
-		$mail = new PHPMailer;
+	require '../PHPMailer/PHPMailerAutoload.php';
+	$mail = new PHPMailer;
 
-		$mail->isSMTP();
-		$mail->Host = $mailHost;
-		$mail->SMTPAuth = true;
-		$mail->Username = $mailUsername;
-		$mail->Password = $mailPassword;
-		$mail->SMTPSecure = 'tls';
-		$mail->Port = 587;
+	$mail->isSMTP();
+	$mail->Host = CONFIG::mailHost;
+	$mail->SMTPAuth = true;
+	$mail->Username = CONFIG::mailUsername;
+	$mail->Password = CONFIG::mailPassword;
+	$mail->SMTPSecure = 'tls';
+	$mail->Port = 587;
 
-		$mail->setFrom($mailSetFromAddress, $mailSetFromName);
-		$mail->addAddress($mailaddAddressAddress, $mailaddAddressName);
-		$mail->isHTML(true);
+	$mail->setFrom(CONFIG::mailSetFromAddress, CONFIG::mailSetFromName);
+	$mail->addAddress(CONFIG::mailAddAddressAddress, CONFIG::mailAddAddressName);
+	$mail->isHTML(true);
 
-		$mail->Subject = 'Weekly Summary';
-		$mail->Body    = 'Hello,<br>
-			<br>
-			You can view your action summary for the past week <a href="' . $link . '">here</a>.<br>
-			<br>
-			Your Ardularm';
-		$mail->AltBody = 'Hello,
+	$mail->Subject = 'Weekly Summary';
+	$mail->Body    = 'Hello,<br>
+		<br>
+		You can view your action summary for the past week <a href="' . $link . '">here</a>.<br>
+		<br>
+		Your Ardularm';
+	$mail->AltBody = 'Hello,
 
-			This is your action summary for the past week. To view this, you have to open HTML version of this email.
+		This is your action summary for the past week. To view this, you have to open HTML version of this email.
 
-			Your Ardularm';
+		Your Ardularm';
 
-		if(!$mail->send()) {
-			echo '{ERROR: Email not sent}';
-			echo 'Mailer Error: ' . $mail->ErrorInfo;
-		} else {
-			echo '{Email sent}';
-		}
-
-		$query = $handler->query("INSERT INTO logs (action) VALUES ('Message has been sent');");
+	if(!$mail->send()) {
+		echo '{ERROR: Summary not sent}';
+		echo 'Mailer Error: ' . $mail->ErrorInfo;
+	} else {
+		echo '{Summary sent}';
 	}
 
-	else {
-		header("Location: ../index.php");
-	}
+	$query = $handler->query("INSERT INTO logs (action) VALUES ('Summary sent');");
 ?>

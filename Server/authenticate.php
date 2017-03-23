@@ -6,18 +6,16 @@
 	 */
 
 	/**
-	 * This function checks whether the key sent by Arduino via POST request agrees.
-	 * @param String $input Key sent by Arduino.
+	 * Checks whether the key sent by Arduino via POST request agrees.
 	 */
-	function Authenticate($input) {
-		include("config.php");
-
-		if ($key == $input) {
-			return true;
+	function Authenticate() {
+		$input = $_POST['key'];
+		if (!isset($_POST['key'])) {
+			$input = $_GET['key'];
 		}
 
-		else {
-			return false;
+		if ($input != CONFIG::key) {
+			header("Location: ../dash.php");
 		}
 	}
 ?>

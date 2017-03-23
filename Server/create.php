@@ -3,7 +3,7 @@
    * @file create.php
    * @Author Michal Mareš
    * @date March, 2017
-   * @brief This script creates necessary tables in database to run Ardularm.
+   * @brief Creates necessary tables in database to run Ardularm.
    */
 
   include("connect.php");

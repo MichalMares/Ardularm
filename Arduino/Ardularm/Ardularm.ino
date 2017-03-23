@@ -2,7 +2,7 @@
  * @file Ardularm.ino
  * @Author Michal Mareš
  * @date March, 2017
- * @brief This is the code running on Arduino unit.
+ * @brief The code running on Arduino unit.
  */
 
 #include <AddicoreRFID.h>
@@ -14,8 +14,9 @@ char server[] = "ardularm.forgotitsmonday.com"; // domain name
 String key = "d=Ym!L259"; // password for running PHP scripts
 int masterTag[] = {42, 52, 108, 16}; // UIDs of the MasterTag
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0x2E, 0x02};
+String area = ""; // TO DO!!!
 
-boolean alarmState = false;
+boolean alarmState = false; // beginning state of the alarm
 unsigned long previousMillis = 0; // will store last time of checking the server
 const long interval = 30000; // interval at which to act (in milliseconds)
 
@@ -109,7 +110,7 @@ void loop() {
         readTag(sourceTag);
 
         String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1]) + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]);
-        post("manageTags", data);
+        post("manageTags", data); // pass tag to the manageTags.php script
       }
     }
 
@@ -118,14 +119,14 @@ void loop() {
       readTag(sourceTag);
       led(50,50,0);
       Serial.print("Is tag trusted? ");
-      boolean trusted = verifyTrusted(sourceTag);
+      boolean trusted = verifyTrusted(sourceTag); // check if tag is trusted or not
       if (trusted == true) {
-        alarmToggle(sourceTag);
+        alarmToggle(sourceTag); // trusted -> toggle alarm
       }
       else if (trusted == false) {
         String action = "Access DENIED";
         String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1]) + "&uid3=" + String(sourceTag[2]) + "&uid4=" + String(sourceTag[3]) + "&action=" + String(action);
-        post("addEntry", data);
+        post("addEntry", data); // not trusted -> add entry to db
       }
     }
     Serial.println();
@@ -145,12 +146,12 @@ void loop() {
   if (alarmState == true) {
     led(50,0,0);
 
-    if (digitalRead(pirPin) == HIGH) {
+    if (digitalRead(pirPin) == HIGH) { // send email and add entry
       post("addEntry", "action=BREACH");
       delay(200);
       post("sendMail", "");
 
-      while (digitalRead(pirPin) == HIGH) {
+      while (digitalRead(pirPin) == HIGH) { // flash until sensor cools down
         led(50,0,0);
         delay(100);
         led(0,0,0);
@@ -159,7 +160,7 @@ void loop() {
     }
   }
 
-  if (alarmState == false) {
+  if (alarmState == false) { // switch led to green color
     led(0,50,0);
   }
 }
@@ -179,9 +180,9 @@ void printIPAddress() {
 }
 
 /**
- * This method compares read tag with pre-set MasterTag.
- * @param  sourceTag Array of UIDs of the read tag
- * @return           Returns true when they agree and false when they differ
+ * Compares read tag with pre-set MasterTag.
+ * @param  sourceTag Array of UIDs of the read tag.
+ * @return           Returns true when they agree and false when they differ.
  */
 boolean checkMaster(int sourceTag[]) {
   for (int i=0; i<4; i++) {
@@ -193,9 +194,9 @@ boolean checkMaster(int sourceTag[]) {
 }
 
 /**
- * This method runs the manageState.php script on the server and either "gets"
+ * Runs the manageState.php script on the server and either "gets"
  * a value from database, or "chages" the database entry.
- * @param option Either "get" or "change", option is then passed on to the manageState.php
+ * @param option Either "get" or "change", option is then passed on to the manageState.php.
  */
 void manageState(String option) {
   String data = "option=" + option;
@@ -213,7 +214,7 @@ void manageState(String option) {
 }
 
 /**
- * This method toggles the alarmState value and adds an entry into the database.
+ * Toggles the alarmState value and adds an entry into the database.
  */
 void alarmToggle(int sourceTag[]) {
   alarmState = !alarmState;
@@ -234,9 +235,10 @@ void alarmToggle(int sourceTag[]) {
 }
 
 /**
- * This method sends UIDs to the verifyTrusted.php script which checks the database.
- * @param  sourceTag Array of UIDs of the read tag
- * @return           Returns true when it is trusted, false when not trusted
+ * Sends UIDs to the verifyTrusted.php script which checks the database and
+ * evaluates the response.
+ * @param  sourceTag Array of UIDs of the read tag.
+ * @return           Returns true when it is trusted, false when not trusted.
  */
 boolean verifyTrusted(int sourceTag[]) {
   String data = "uid1=" + String(sourceTag[0]) + "&uid2=" + String(sourceTag[1])
@@ -252,10 +254,10 @@ boolean verifyTrusted(int sourceTag[]) {
 }
 
 /**
- * This method calls corresponding script on the server via POST request
- * @param  page The name of the script without the ".php" suffix
- * @param  data String to be sent as data for the script
- * @return      Returns the response of the server
+ * Calls corresponding script on the server via POST request.
+ * @param  page The name of the script without the ".php" suffix.
+ * @param  data String to be sent as data for the script.
+ * @return      Returns the response of the server.
  */
 String post(String page, String data) {
   data += "&key=" + key;
@@ -282,8 +284,8 @@ String post(String page, String data) {
 }
 
 /**
- * This method looks for script's response enclosed within "<" and ">"
- * @return Returns the response of the server
+ * Looks for script's response enclosed within "<" and ">".
+ * @return Returns the response of the server.
  */
 String getResponse() {
   String output = "";
@@ -311,10 +313,10 @@ String getResponse() {
 }
 
 /**
- * This method lights the LED with corresponding color.
- * @param redVal   Brightness value for the red value of diode
- * @param greenVal Brightness value for the green value of diode
- * @param blueVal  Brightness value for the blue value of diode
+ * Lights up the LED with corresponding color.
+ * @param redVal   Red value [0-255].
+ * @param greenVal Green value [0-255].
+ * @param blueVal  Blue value [0-255].
  */
 void led(int redVal, int greenVal, int blueVal) {
   analogWrite(red, redVal);
@@ -323,8 +325,8 @@ void led(int redVal, int greenVal, int blueVal) {
 }
 
 /**
- * Prints the UIDs of the tag into the Serial
- * @param sourceTag Array of UIDs of the read tag
+ * Prints the UIDs of the tag into the Serial.
+ * @param sourceTag Array of UIDs of the read tag.
  */
 void readTag(int sourceTag[]) {
   uchar checksum = sourceTag[0] ^ sourceTag[1] ^ sourceTag[2] ^ sourceTag[3];
