@@ -33,14 +33,18 @@
       ?>
 
       <form class="form-inline" action="dash.php" method="get">
-        View entries from
-        <input class="form-control" type="text" autocomplete="off" name="dateFrom"
-					id="dateFrom" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateFrom'];?>">
-        to
-        <input class="form-control" type="text" autocomplete="off" name="dateTo"
-					id="dateTo" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateTo'];?>">
+        <div class="form-group">
+          <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+          <div class="input-group">
+            <div class="input-group-addon">From</div>
+            <input class="form-control" type="text" autocomplete="off" name="dateFrom" id="dateFrom" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateFrom'];?>">
+            <div class="input-group-addon">to</div>
+            <input class="form-control" type="text" autocomplete="off" name="dateTo" id="dateTo" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateTo'];?>">
+          </div>
+        </div>
         <input class="btn btn-default" type="submit" value="Search">
       </form>
+
       <p>Showing last 50 entries</p>
 
       <div class="container-fluid">

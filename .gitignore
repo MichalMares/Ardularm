@@ -1,1 +1,4 @@
 /Server/config.php
+/Doxygen/*
+.pioenvs
+.piolibdeps

@@ -10,11 +10,11 @@
 #include <SPI.h>
 
 // user-configurable
-char server[] = "ardularm.forgotitsmonday.com"; // domain name
-String key = "d=Ym!L259"; // password for running PHP scripts
-int masterTag[] = {42, 52, 108, 16}; // UIDs of the MasterTag
-byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0x2E, 0x02};
-String area = ""; // TO DO!!!
+char server[] = "ardularm.forgotitsmonday.com"; /// Domain.
+String key = "d=Ym!L259"; /// Password for running PHP scripts.
+String area = "hallway"; /// Location of this Ardularm.
+int masterTag[] = {42, 52, 108, 16}; /// UIDs of the MasterTag.
+byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0x2E, 0x02}; /// Arduino Mac Address.
 
 boolean alarmState = false; // beginning state of the alarm
 unsigned long previousMillis = 0; // will store last time of checking the server
@@ -260,7 +260,7 @@ boolean verifyTrusted(int sourceTag[]) {
  * @return      Returns the response of the server.
  */
 String post(String page, String data) {
-  data += "&key=" + key;
+  data += "&key=" + key + "&area=" + area;
   String response;
 
   if (client.connect(server, 80)) {
