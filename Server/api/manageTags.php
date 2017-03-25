@@ -26,12 +26,12 @@
 
 	if ($result->rowCount() == 1) { // if card does exist
 		$result->execute(array($uid1, $uid2, $uid3, $uid4)); // why doesn't it work without executing again?
-		while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+		while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$id = $row["id"]; // get card's id from the db
 		}
 
 		$result->execute(array($uid1, $uid2, $uid3, $uid4));
-		while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+		while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$trusted = $row["trusted"]; // get card's trusted value
 		}
 

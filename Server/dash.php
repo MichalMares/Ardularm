@@ -8,9 +8,6 @@
   include('config.php');
 	include('connect.php');
 	$handler = Connection();
-
-	$query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id ORDER BY time DESC LIMIT 50;";
-	$result = $handler->query($query);
 ?>
 
 <?php
@@ -34,30 +31,71 @@
 
       <form class="form-inline" action="dash.php" method="get">
         <div class="form-group">
-          <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
           <div class="input-group">
-            <div class="input-group-addon">From</div>
+            <div class="input-group-addon">Show entries from</div>
             <input class="form-control" type="text" autocomplete="off" name="dateFrom" id="dateFrom" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateFrom'];?>">
             <div class="input-group-addon">to</div>
             <input class="form-control" type="text" autocomplete="off" name="dateTo" id="dateTo" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateTo'];?>">
           </div>
         </div>
         <input class="btn btn-default" type="submit" value="Search">
+        <input class="btn btn-default" type="button" onclick="ClearFields();" value="Clear">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Autorefresh
+          </label>
+        </div>
       </form>
 
-      <p>Showing last 50 entries</p>
+      <script>
+        var reloading;
+
+        function ClearFields() {
+          document.getElementById("dateFrom").value = "";
+          document.getElementById("dateTo").value = "";
+        }
+
+        function checkReloading() {
+            if (window.location.hash=="#autoreload") {
+                reloading=setTimeout("window.location.reload();", 5000);
+                document.getElementById("reloadCB").checked=true;
+            }
+        }
+
+        function toggleAutoRefresh(cb) {
+            if (cb.checked) {
+                window.location.replace("#autoreload");
+                reloading=setTimeout("window.location.reload();", 5000);
+            } else {
+                window.location.replace("#");
+                clearTimeout(reloading);
+            }
+        }
+
+        window.onload=checkReloading;
+      </script>
+
+      <?php
+        if ( !(empty($dateFrom)) && !(empty($dateTo)) ) {
+          $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id WHERE time BETWEEN '" . $dateFrom . " 00:00:00' AND '" . $dateTo . " 23:59:59' ORDER BY time DESC;";
+          $result = $handler->query($query);
+
+          if ($dateFrom > $dateTo) {
+            echo "ERROR: dateFrom > dateTo";
+          }
+        }
+        
+        else {
+          $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id ORDER BY time DESC LIMIT 100;";
+          $result = $handler->query($query);
+          echo "Showing last 100 entries";
+        }
+      ?>
 
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm-0 col-sm-offset-0 col-md-0 col-md-offset-0 main">
             <h1 class="page-header">Log</h1>
-
-            <?php
-              if ( !(empty($dateFrom)) && !(empty($dateTo)) ) {
-                $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id WHERE time BETWEEN '" . $dateFrom . "' AND '" . $dateTo . "' ORDER BY time DESC;";
-                $result = $handler->query($query);
-              }
-            ?>
 
             <div class="table-responsive">
               <table class="table table-striped">
@@ -75,7 +113,7 @@
 
             		<?php
             			if ($result!==FALSE) {
-            				while ($row = $result->fetch()) {
+                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             					echo "<tr>
             						<td> {$row['time']} </td>
                         <td> {$row['area']} </td>

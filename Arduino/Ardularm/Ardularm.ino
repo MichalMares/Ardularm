@@ -44,6 +44,7 @@ const int pirPin = 7; // PIR sensor pin
 void setup() {
   Serial.begin(9600);
   SPI.begin();
+  delay(250);
 
   Serial.println("Initializing...");
 
@@ -66,9 +67,9 @@ void setup() {
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
   }
-
-  delay(5000);
   printIPAddress();
+
+  manageState("sync");
   post("addEntry", "action=Power ON");
   Serial.println("--- READY ---");
   Serial.println();
@@ -148,8 +149,6 @@ void loop() {
 
     if (digitalRead(pirPin) == HIGH) { // send email and add entry
       post("addEntry", "action=BREACH");
-      delay(200);
-      post("sendMail", "");
 
       while (digitalRead(pirPin) == HIGH) { // flash until sensor cools down
         led(50,0,0);
@@ -157,6 +156,8 @@ void loop() {
         led(0,0,0);
         delay(100);
       }
+
+      post("sendMail", "");
     }
   }
 
