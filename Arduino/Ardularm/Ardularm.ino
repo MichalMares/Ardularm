@@ -44,7 +44,6 @@ const int pirPin = 7; // PIR sensor pin
 void setup() {
   Serial.begin(9600);
   SPI.begin();
-  delay(250);
 
   Serial.println("Initializing...");
 
@@ -67,10 +66,12 @@ void setup() {
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
   }
-  printIPAddress();
+  delay(1000);
 
+  printIPAddress();
   manageState("sync");
   post("addEntry", "action=Power ON");
+  
   Serial.println("--- READY ---");
   Serial.println();
 }
