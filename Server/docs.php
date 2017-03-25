@@ -13,7 +13,7 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h1><a href="/Doxygen/">Dokumentace</a></h1>
+        <h1><a href="/DoxyDoc/">Dokumentace</a></h1>
         <p>Vygenerováno programem Doxygen.</p>
       </div>
       

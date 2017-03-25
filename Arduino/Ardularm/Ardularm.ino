@@ -10,10 +10,10 @@
 #include <SPI.h>
 
 // user-configurable
-char server[] = "ardularm.forgotitsmonday.com"; /// Domain.
-String key = "d=Ym!L259"; /// Password for running PHP scripts.
-String area = "hallway"; /// Location of this Ardularm.
-int masterTag[] = {42, 52, 108, 16}; /// UIDs of the MasterTag.
+char server[] = "domain.tld"; /// Domain.
+String key = "password"; /// Password for running PHP scripts.
+String area = "location"; /// Location of this Ardularm.
+int masterTag[] = {255, 255, 255, 255}; /// UIDs of the MasterTag.
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0x2E, 0x02}; /// Arduino Mac Address.
 
 boolean alarmState = false; // beginning state of the alarm
@@ -215,6 +215,7 @@ void manageState(String option) {
 
 /**
  * Toggles the alarmState value and adds an entry into the database.
+ * @param  sourceTag Array of UIDs of the read tag.
  */
 void alarmToggle(int sourceTag[]) {
   alarmState = !alarmState;
@@ -309,7 +310,7 @@ String getResponse() {
       }
     }
   }
-  return output = "ERROR: Response not found";
+  return output = "ERROR: Response Not Found";
 }
 
 /**

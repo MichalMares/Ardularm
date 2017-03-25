@@ -38,11 +38,11 @@ To run this project on your own, there are a few steps necessary:
 Trusted card has to be used to toggle the state. When the alarm is on the diode turns read, when off it is green.
 
 **How to add my card into trusted?**   
-First, MasterTag has to be detected and the diode turns blue. Then you can scan your card and it will be added as trusted. BEWARE: If your card is already trusted, it will be removed.
+First, MasterTag has to be detected and the diode turns blue. Then you can scan your card and it will be added as trusted. BEWARE: If your card is already trusted, it will be REMOVED.
 
 **How to view the log?**   
-Log is located on the server at `../dash.php`.
+Log is located on the page `../dash.php`.
 
 ## License
 
-[MIT](https://github.com/MichalMares/Ardularm/blob/arduino/LICENSE.txt) @ [Michal Mareš](https://github.com/MichalMares)
+[MIT](https://github.com/MichalMares/Ardularm/blob/master/LICENSE.txt) @ [Michal Mareš](https://github.com/MichalMares)

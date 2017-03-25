@@ -31,7 +31,7 @@
 		}
 
 		$qLog = $handler->prepare(
-			"INSERT INTO logs (area, action, card_id) VALUES (?, ?);"
+			"INSERT INTO logs (area, action, card_id) VALUES (?, ?, ?);"
 		);
 		$qLog->execute(array($area, $action, $id)); // insert entry with corresponding card id into the db
 	}

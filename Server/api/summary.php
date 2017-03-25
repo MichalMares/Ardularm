@@ -29,6 +29,7 @@
 
 	$mail->setFrom(CONFIG::mailSetFromAddress, CONFIG::mailSetFromName);
 	$mail->addAddress(CONFIG::mailAddAddressAddress, CONFIG::mailAddAddressName);
+	
 	$mail->isHTML(true);
 
 	$mail->Subject = 'Weekly Summary';
@@ -44,11 +45,11 @@
 		Your Ardularm';
 
 	if(!$mail->send()) {
-		echo '{ERROR: Summary not sent}';
+		echo '{ERROR: Summary NOT Sent}';
 		echo 'Mailer Error: ' . $mail->ErrorInfo;
 	} else {
-		echo '{Summary sent}';
+		echo '{Summary Sent}';
 	}
 
-	$query = $handler->query("INSERT INTO logs (action) VALUES ('Summary sent');");
+	$query = $handler->query("INSERT INTO logs (action) VALUES ('Summary Sent');");
 ?>
