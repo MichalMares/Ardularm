@@ -13,13 +13,10 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h1>Arduino</h1>
-        <p>Část, která je programována na Arduinu.</p>
-        <br>
-        <h1>Server</h1>
-        <p>Serverová část v PHP.</p>
+        <h1><a href="/Doxygen/">Dokumentace</a></h1>
+        <p>Vygenerováno programem Doxygen.</p>
       </div>
-
+      
     </div> <!-- /container -->
 
 

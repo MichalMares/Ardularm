@@ -63,7 +63,8 @@
               <table class="table table-striped">
             		<tr>
             			<th>Time</th>
-            			<th>Action</th>
+                  <th>Area</th>
+                  <th>Action</th>
             			<th>Card ID</th>
             			<th>User</th>
             			<th>UID1</th>
@@ -77,6 +78,7 @@
             				while ($row = $result->fetch()) {
             					echo "<tr>
             						<td> {$row['time']} </td>
+                        <td> {$row['area']} </td>
             						<td> {$row['action']} </td>
             						<td> {$row['card_id']} </td>
             						<td> {$row['user_name']} </td>

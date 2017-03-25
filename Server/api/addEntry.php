@@ -16,6 +16,7 @@
 	$uid2 = $_POST['uid2'];
 	$uid3 = $_POST['uid3'];
 	$uid4 = $_POST['uid4'];
+	$area = $_POST['area'];
 	$action = $_POST['action'];
 
 	$qCheck = "SELECT * FROM cards
@@ -30,9 +31,9 @@
 		}
 
 		$qLog = $handler->prepare(
-			"INSERT INTO logs (action, card_id) VALUES (?, ?);"
+			"INSERT INTO logs (area, action, card_id) VALUES (?, ?);"
 		);
-		$qLog->execute(array($action, $id)); // insert entry with corresponding card id into the db
+		$qLog->execute(array($area, $action, $id)); // insert entry with corresponding card id into the db
 	}
 
 	else { // if card does not exist
@@ -40,11 +41,11 @@
 			"INSERT INTO cards (uid1, uid2, uid3, uid4) VALUES (?, ?, ?, ?);"
 		);
 		$qLog = $handler->prepare(
-			"INSERT INTO logs (action, card_id) VALUES (?, LAST_INSERT_ID());"
+			"INSERT INTO logs (area, action, card_id) VALUES (?, ?, LAST_INSERT_ID());"
 		);
 
 		$qCard->execute(array($uid1, $uid2, $uid3, $uid4)); // insert new card into db
-		$qLog->execute(array($action)); // insert entry with corresponding card id into the db
+		$qLog->execute(array($area, $action)); // insert entry with corresponding card id into the db
 	}
 
 	echo "{" . $action . "}"; // return message to Arduino
