@@ -20,22 +20,24 @@ Used components are:
 
 ## Installation
 
-To run this project on your own, there are a few steps necessary:
+Ardularm had been developed with the use od Arduino IDE for the Arduino code and any other editor for the server-side PHP code. Libraries [AddicoreRFID](http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip)* and [Bootstrap framework](http://getbootstrap.com/) were used while creating this. To run this project on your own, there are a few steps necessary:
 
-1. Wire up your Arduino with all the components.
-2. Fill in the variables in `Arduino\Ardularm\Ardularm.ino` under the comment "user-configurable".
 3. Fill in the settings file with the right credentials for your database in `Server\config.template.php` and save it as `Server\config.php`.
 4. Run the `Server\create.php` script. This will create all the tables needed for the project and necessary values.
 5. Create a `Server\.htpasswd` file with your desired user name and password (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd).
-6. Upload content of `Server` on your server.
-7. Wire up your Arduino UNO according to Wiring section of this document.
-8. Upload `Arduino\Ardularm\Ardularm.ino` on your Arduino UNO.
-9. Enjoy your safety.
+6. Upload the content of `Server` onto your server.
+7. Wire up your Arduino UNO according to wiring section of this document.
+8. Fill in the variables in `Arduino\Ardularm\Ardularm.ino` under the comment "user-configurable".
+8. Upload `Arduino\Ardularm\Ardularm.ino` on your Arduino UNO using the Arduino IDE.
+9. Repeat steps 7, 8, 9 for each unit you want to connect.
+9. Enjoy your extra safety.
+
+\* The AddicoreRFID library had to be edited in order to work with Ethernet shield.
 
 ## How to use Ardularm?
 
 **How to turn Ardularm on/off?**   
-Trusted card has to be used to toggle the state. When the alarm is on the diode turns read, when off it is green.
+Trusted card has to be used to toggle the state. When the alarm is on the diode turns read, when off it is green (as a traffic light - green means you can enter).
 
 **How to add my card into trusted?**   
 First, MasterTag has to be detected and the diode turns blue. Then you can scan your card and it will be added as trusted. BEWARE: If your card is already trusted, it will be REMOVED.
