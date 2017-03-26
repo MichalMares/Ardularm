@@ -12,8 +12,8 @@
 	$handler = Connection();
 	Authenticate();
 
-	$dateFrom = date("Y-m-d");
-	$dateTo = date('Y-m-d', strtotime('-7 days'));
+	$dateTo = date("Y-m-d");
+	$dateFrom = date('Y-m-d', strtotime('-7 days'));
 	$link = CONFIG::domain . '/dash.php?dateFrom=' . $dateFrom . '&dateTo=' . $dateTo;
 
 	require '../PHPMailer/PHPMailerAutoload.php';

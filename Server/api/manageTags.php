@@ -25,7 +25,7 @@
 	$result->execute(array($uid1, $uid2, $uid3, $uid4)); // try to find card in the db
 
 	if ($result->rowCount() == 1) { // if card does exist
-		$result->execute(array($uid1, $uid2, $uid3, $uid4)); // why doesn't it work without executing again?
+		$result->execute(array($uid1, $uid2, $uid3, $uid4));
 		while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$id = $row["id"]; // get card's id from the db
 		}

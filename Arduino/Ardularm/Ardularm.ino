@@ -108,6 +108,7 @@ void loop() {
       }
 
       if (status == MI_OK) {
+        led(50,50,0);
         int sourceTag[] = {str[0], str[1], str[2], str[3], str[4]};
         readTag(sourceTag);
 
@@ -146,7 +147,7 @@ void loop() {
 
   // check PIR sensor
   if (alarmState == true) {
-    led(50,0,0);
+    led(50,0,0); // switch led to red color
 
     if (digitalRead(pirPin) == HIGH) { // send email and add entry
       post("addEntry", "action=BREACH");
