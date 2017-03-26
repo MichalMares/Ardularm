@@ -1,6 +1,6 @@
 <?php
 	/**
-	 * @file dashboard.php
+	 * @file dash.php
 	 * @Author Michal Mareš
 	 * @date March, 2017
 	 * @brief Enables the user to see entries in database.
@@ -28,24 +28,6 @@
         $dateTo = $_GET['dateTo'];
         $refresh = $_GET['refresh'];
       ?>
-
-      <form class="form-inline" action="dash.php" method="get">
-        <div class="form-group">
-          <div class="input-group">
-            <div class="input-group-addon">Show entries from</div>
-            <input class="form-control" type="text" autocomplete="off" name="dateFrom" id="dateFrom" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateFrom'];?>">
-            <div class="input-group-addon">to</div>
-            <input class="form-control" type="text" autocomplete="off" name="dateTo" id="dateTo" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateTo'];?>">
-          </div>
-        </div>
-        <input class="btn btn-default" type="submit" value="Search">
-        <input class="btn btn-default" type="button" onclick="ClearFields();" value="Clear">
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Autorefresh
-          </label>
-        </div>
-      </form>
 
       <script>
         var reloading;
@@ -75,27 +57,52 @@
         window.onload=checkReloading;
       </script>
 
-      <?php
-        if ( !(empty($dateFrom)) && !(empty($dateTo)) ) {
-          $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id WHERE time BETWEEN '" . $dateFrom . " 00:00:00' AND '" . $dateTo . " 23:59:59' ORDER BY time DESC;";
-          $result = $handler->query($query);
-
-          if ($dateFrom > $dateTo) {
-            echo "ERROR: dateFrom > dateTo";
-          }
-        }
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Log</h1>
         
-        else {
-          $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id ORDER BY time DESC LIMIT 100;";
-          $result = $handler->query($query);
-          echo "Showing last 100 entries";
-        }
-      ?>
+        <form class="form-inline" action="dash.php" method="get">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">Show entries from</div>
+              <input class="form-control" type="text" autocomplete="off" name="dateFrom" id="dateFrom" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateFrom'];?>">
+              <div class="input-group-addon">to</div>
+              <input class="form-control" type="text" autocomplete="off" name="dateTo" id="dateTo" size="12" placeholder="YYYY-MM-DD" value="<?php echo $_GET['dateTo'];?>">
+            </div>
+          </div>
+          <input class="btn btn-default" type="submit" value="Search">
+          <input class="btn btn-default" type="button" onclick="ClearFields();" value="Clear">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Autorefresh
+            </label>
+          </div>
+        </form>
+
+        <?php
+          if ( !(empty($dateFrom)) && !(empty($dateTo)) ) {
+            $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id WHERE time BETWEEN '" . $dateFrom . " 00:00:00' AND '" . $dateTo . " 23:59:59' ORDER BY time DESC;";
+            $result = $handler->query($query);
+
+            if ($dateFrom > $dateTo) {
+              echo "ERROR: dateFrom > dateTo";
+            }
+          }
+          
+          else {
+            $query = "SELECT * FROM logs LEFT JOIN cards ON logs.card_id=cards.id ORDER BY time DESC LIMIT 100;";
+            $result = $handler->query($query);
+            echo "Showing last 100 entries";
+          }
+        ?>
+
+        <br>
+        <a href="/user.php">Change User Name</a>
+        </div>
 
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm-0 col-sm-offset-0 col-md-0 col-md-offset-0 main">
-            <h1 class="page-header">Log</h1>
 
             <div class="table-responsive">
               <table class="table table-striped">
