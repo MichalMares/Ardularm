@@ -15,12 +15,10 @@
       <div class="jumbotron">
 
 <h1>Ardularm</h1>
-<p>Ardularm is a school project which focuses on making an inexpensive alarm based on the Arduino platform.</p>
-<h2>Motivation</h2>
-<p>This is a proof-of-concept. Arduino is very powerful!</p>
-<h2>Wiring</h2>
-<p>Wiring can be seen in <code>Ardularm (wiring).fzz</code> (via Fritzing) or as in PNG format in <code>Ardularm (wiring).png</code>.<br />
-Used components are:</p>
+<p>Ardularm je projekt, který se zabývá vytvořením levného domácího alarmu prostřednictvím platformy Arduino.</p>
+<h2>Komponenty a zapojení</h2>
+<p>Zapojení je zobrazeno v souboru <code>Ardularm (wiring).fzz</code> (formát programu Fritzing) nebo ve formátu PNG <code>Ardularm (wiring).png</code>.<br />
+Použité součástky:</p>
 <ul>
 <li>Arduino UNO Rev3</li>
 <li>Ethernet Shield R3</li>
@@ -28,29 +26,31 @@ Used components are:</p>
 <li>Passive Infrared Sensor HC-SR501 </li>
 <li>Generic RGB Diode</li>
 </ul>
-<p>(Other components might work as well - not tested.)</p>
-<h2>Installation</h2>
-<p>Ardularm had been developed with the use od Arduino IDE for the Arduino code and any other editor for the server-side PHP code. Libraries <a href="http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip">AddicoreRFID</a>* and <a href="http://getbootstrap.com/">Bootstrap framework</a> were used while creating this. To run this project on your own, there are a few steps necessary:</p>
-<ol start="3">
-<li>Fill in the settings file with the right credentials for your database in <code>Server\config.template.php</code> and save it as <code>Server\config.php</code>.</li>
-<li>Run the <code>Server\create.php</code> script. This will create all the tables needed for the project and necessary values.</li>
-<li>Create a <code>Server\.htpasswd</code> file with your desired user name and password (<a href="https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd">https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd</a>).</li>
-<li>Upload the content of <code>Server</code> onto your server.</li>
-<li>Wire up your Arduino UNO according to wiring section of this document.</li>
-<li>Fill in the variables in <code>Arduino\Ardularm\Ardularm.ino</code> under the comment &quot;user-configurable&quot;.</li>
-<li>Upload <code>Arduino\Ardularm\Ardularm.ino</code> on your Arduino UNO using the Arduino IDE.</li>
-<li>Repeat steps 7, 8, 9 for each unit you want to connect.</li>
-<li>Enjoy your extra safety.</li>
+<p>(Jiné součástky mohou také fungovat - nevyzkoušeno.)</p>
+<h2>Instalace</h2>
+<p>Ardularm byl vytvořen pomocí Arduino IDE (kód pro Arduino) a dalším editorem (pro serverovou část, PHP kód). Knihovny <a href="http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip">AddicoreRFID</a>* a <a href="http://getbootstrap.com/">Bootstrap framework</a> byly využity při vývoji. Pro instalaci projektu je potřeba:</p>
+<ol>
+<li>Upravte a vyplňte <code>Server\config.template.php</code> a uložte soubor jako <code>Server\config.php</code>.</li>
+<li>Vytvořte soubor <code>Server\.htpasswd</code> se zvoleným uživatelským jménem a heslem (<a href="https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd">https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd</a>).</li>
+<li>Nahrajte obsah adresáře <code>Server</code> na server.</li>
+<li>Spusťte <code>Server\create.php</code>. Tím automaticky vytvoříte tabulky databáze potřebné pro fungování Ardularmu.</li>
+<li>Zapojte vaše Arduino UNO podle sekce &quot;Komponenty a zapojení&quot;.</li>
+<li>Vyplňte proměnné v <code>Arduino\Ardularm\Ardularm.ino</code> pod komentářem &quot;user-configurable&quot;.</li>
+<li>Nahrajte <code>Arduino\Ardularm\Ardularm.ino</code> na vaše Arduino UNO prostřednictvím Arduino IDE.</li>
+<li>Opakujte kroky 5, 6, 7 pro každé zařízení, které si přejete připojit.</li>
+<li>Užívejte si pocit bezpečí.</li>
 </ol>
-<p>* The AddicoreRFID library had to be edited in order to work with Ethernet shield.</p>
-<h2>How to use Ardularm?</h2>
-<p><strong>How to turn Ardularm on/off?</strong><br />
-Trusted card has to be used to toggle the state. When the alarm is on the diode turns read, when off it is green (as a traffic light - green means you can enter).</p>
-<p><strong>How to add my card into trusted?</strong><br />
-First, MasterTag has to be detected and the diode turns blue. Then you can scan your card and it will be added as trusted. BEWARE: If your card is already trusted, it will be REMOVED.</p>
-<p><strong>How to view the log?</strong><br />
-Log is located on the page <code>../dash.php</code>.</p>
-<h2>License</h2>
+<p>* Knihovna AddicoreRFID musela být modifikována, aby fungovala paralelně s Ethernet Shield.</p>
+<h2>Návod k použití</h2>
+<p><strong>Zapnutí/vypnutí alarmu</strong><br />
+Pouze důvěryhodné karty mohou přepínat stav alarmu. Pokud je alarm aktivní, svítí červeně, pokud neaktivní, zeleně (jako semafor - zelená znamená, že můžete projít).</p>
+<p><strong>Přidat/odebrat kartu do/z důvěryhodných</strong><br />
+Nejdříve je potřeba načíst MasterTag (administrátorská karta) a vyčkat, než se dioda rozsvítí modře. Pak lze načíst další kartu, která bude zaevidována jako důvěryhodná, pokud předtím nebyla. POZOR: Pokud karta již byla důvěryhodná, bude z důvěryhodných ODEBRÁNA.</p>
+<p><strong>Zobrazení událost</strong><br />
+Zobrazení událostí je možné v logu na <code>../dash.php</code>.</p>
+<p><strong>Změna jména karty</strong>
+Pod výběrem data u logu klikněte na &quot;Change User Name&quot;.</p>
+<h2>Licence</h2>
 <p><a href="https://github.com/MichalMares/Ardularm/blob/master/LICENSE.txt">MIT</a> @ <a href="https://github.com/MichalMares">Michal Mareš</a></p>
 
       </div>
