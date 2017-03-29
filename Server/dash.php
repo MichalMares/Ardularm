@@ -1,13 +1,13 @@
 <?php
-	/**
-	 * @file dash.php
-	 * @Author Michal Mareš
-	 * @date March, 2017
-	 * @brief Enables the user to see entries in database.
-	 */
+  /**
+   * @file dash.php
+   * @Author Michal Mareš
+   * @date March, 2017
+   * @brief Enables the user to see entries in database.
+   */
   include('config.php');
-	include('connect.php');
-	$handler = Connection();
+  include('connect.php');
+  $handler = Connection();
 ?>
 
 <?php

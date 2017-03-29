@@ -1,13 +1,13 @@
 <?php
-	/**
-	 * @file user.php
-	 * @Author Michal Mareš
-	 * @date March, 2017
-	 * @brief Enables the user to change names associated with cards.
-	 */
+  /**
+   * @file user.php
+   * @Author Michal Mareš
+   * @date March, 2017
+   * @brief Enables the user to change names associated with cards.
+   */
   include('config.php');
-	include('connect.php');
-	$handler = Connection();
+  include('connect.php');
+  $handler = Connection();
 ?>
 
 <?php
