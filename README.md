@@ -4,7 +4,12 @@ Ardularm is a proof-of-concept project which focuses on making an inexpensive al
 
 ## Components and Wiring
 
-Wiring can be seen in `Ardularm (wiring).fzz` (via Fritzing) or as in PNG format in `Ardularm (wiring).png`.   
+Scheme:
+
+![Wiring](Wiring.png)
+
+You can also view this scheme in the Fritzing programme (`Ardularm (wiring).fzz`).
+
 Used components:
 * Arduino UNO Rev3
 * Ethernet Shield R3
