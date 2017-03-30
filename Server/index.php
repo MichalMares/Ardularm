@@ -17,28 +17,28 @@
 <h1>Ardularm</h1>
 <p>Ardularm je projekt, který se zabývá vytvořením levného domácího alarmu prostřednictvím platformy Arduino.</p>
 <h2>Komponenty a zapojení</h2>
-<p>Zapojení je zobrazeno v souboru <code>Ardularm (wiring).fzz</code> (formát programu Fritzing) nebo ve formátu PNG <code>Ardularm (wiring).png</code>.<br />
-Použité součástky:</p>
+<p>Schéma zapojení:</p>
+<p><img src="DoxyDoc/Wiring.png" alt="Wiring" width=100%/></p>
 <ul>
-<li>Arduino UNO Rev3</li>
-<li>Ethernet Shield R3</li>
-<li>RFID Reader RC522</li>
-<li>Passive Infrared Sensor HC-SR501 </li>
-<li>Generic RGB Diode</li>
+<li><p>Arduino UNO Rev3</p></li>
+<li><p>Ethernet Shield R3</p></li>
+<li><p>RFID Reader RC522</p></li>
+<li><p>Passive Infrared Sensor HC-SR501 </p></li>
+<li><p>Generic RGB Diode</p></li>
 </ul>
 <p>(Jiné součástky mohou také fungovat - nevyzkoušeno.)</p>
 <h2>Instalace</h2>
 <p>Ardularm byl vytvořen pomocí Arduino IDE (kód pro Arduino) a dalším editorem (pro serverovou část, PHP kód). Knihovny <a href="http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip">AddicoreRFID</a>* a <a href="http://getbootstrap.com/">Bootstrap framework</a> byly využity při vývoji. Pro instalaci projektu je potřeba:</p>
 <ol>
-<li>Upravte a vyplňte <code>Server\config.template.php</code> a uložte soubor jako <code>Server\config.php</code>.</li>
-<li>Vytvořte soubor <code>Server\.htpasswd</code> se zvoleným uživatelským jménem a heslem (<a href="https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd">https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd</a>).</li>
-<li>Nahrajte obsah adresáře <code>Server</code> na server.</li>
-<li>Spusťte <code>Server\create.php</code>. Tím automaticky vytvoříte tabulky databáze potřebné pro fungování Ardularmu.</li>
-<li>Zapojte vaše Arduino UNO podle sekce &quot;Komponenty a zapojení&quot;.</li>
-<li>Vyplňte proměnné v <code>Arduino\Ardularm\Ardularm.ino</code> pod komentářem &quot;user-configurable&quot;.</li>
-<li>Nahrajte <code>Arduino\Ardularm\Ardularm.ino</code> na vaše Arduino UNO prostřednictvím Arduino IDE.</li>
-<li>Opakujte kroky 5, 6, 7 pro každé zařízení, které si přejete připojit.</li>
-<li>Užívejte si pocit bezpečí.</li>
+<li><p>Upravte a vyplňte <code>Server\config.template.php</code> a uložte soubor jako <code>Server\config.php</code>.</p></li>
+<li><p>Vytvořte soubor <code>Server\.htpasswd</code> se zvoleným uživatelským jménem a heslem (<a href="https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd">https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd</a>).</p></li>
+<li><p>Nahrajte obsah adresáře <code>Server</code> na server.</p></li>
+<li><p>Spusťte <code>Server\create.php</code>. Tím automaticky vytvoříte tabulky databáze potřebné pro fungování Ardularmu.</p></li>
+<li><p>Zapojte vaše Arduino UNO podle sekce &quot;Komponenty a zapojení&quot;.</p></li>
+<li><p>Vyplňte proměnné v <code>Arduino\Ardularm\Ardularm.ino</code> pod komentářem &quot;user-configurable&quot;.</p></li>
+<li><p>Nahrajte <code>Arduino\Ardularm\Ardularm.ino</code> na vaše Arduino UNO prostřednictvím Arduino IDE.</p></li>
+<li><p>Opakujte kroky 5, 6, 7 pro každé zařízení, které si přejete připojit.</p></li>
+<li><p>Užívejte si pocit bezpečí.</p></li>
 </ol>
 <p>* Knihovna AddicoreRFID musela být modifikována, aby fungovala paralelně s Ethernet Shield.</p>
 <h2>Návod k použití</h2>

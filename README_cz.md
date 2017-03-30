@@ -4,7 +4,10 @@ Ardularm je projekt, který se zabývá vytvořením levného domácího alarmu 
 
 ## Komponenty a zapojení
 
-Zapojení je zobrazeno v souboru `Ardularm (wiring).fzz` (formát programu Fritzing) nebo ve formátu PNG `Ardularm (wiring).png`.   
+Schéma zapojení:
+
+![Wiring](Wiring.png)
+
 Použité součástky:
 * Arduino UNO Rev3
 * Ethernet Shield R3
