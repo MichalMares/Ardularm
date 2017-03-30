@@ -16,6 +16,7 @@
 
 		if ($input != CONFIG::key) {
 			header("Location: ../dash.php");
+			die();
 		}
 	}
 ?>
