@@ -6,11 +6,7 @@ Ardularm is a proof-of-concept project which focuses on making an inexpensive al
 
 Scheme:
 
-<<<<<<< HEAD
 ![Wiring](Wiring.png)
-=======
-![Wiring](../Wiring.png)
->>>>>>> d3628477930ce905ec9472ed10753d109b6a428b
 
 You can also view this scheme in the Fritzing programme (`Ardularm (wiring).fzz`).
 
