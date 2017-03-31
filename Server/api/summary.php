@@ -24,7 +24,7 @@
 	<br>
 	This is your action summary for the past week:<br>";
 
-	$msg .= "<table>
+	$msg .= "<table border=1>
 				<tr>
 					<th>Time</th>
 					<th>Area</th>
