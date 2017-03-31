@@ -31,7 +31,7 @@
 <h2>Instalace</h2>
 <p>Ardularm byl vytvořen pomocí Arduino IDE (kód pro Arduino) a dalším editorem (pro serverovou část, PHP kód). Knihovny <a href="http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip">AddicoreRFID</a>* a <a href="http://getbootstrap.com/">Bootstrap framework</a> byly využity při vývoji. Pro instalaci projektu je potřeba:</p>
 <ol>
-<li><p>Vytvořte databázi na vašem hostingu.</p></li>
+<li><p>Vytvořte databázi a e-mailovou schránku na vašem hostingu.</p></li>
 <li><p>Upravte a vyplňte <code>Server\config.template.php</code> a uložte soubor jako <code>Server\config.php</code>.</p></li>
 <li><p>Vytvořte soubor <code>Server\.htpasswd</code> se zvoleným uživatelským jménem a heslem (<a href="https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd">https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd</a>).</p></li>
 <li><p>Nahrajte obsah adresáře <code>Server</code> na server.</p></li>

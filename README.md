@@ -23,7 +23,7 @@ Used components:
 
 Ardularm had been developed with Arduino IDE (for the Arduino code) and any other editor (for the server-side PHP code). Libraries [AddicoreRFID](http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip)* and [Bootstrap framework](http://getbootstrap.com/) were used while creating this. To run this project on your own, there are a few steps necessary:
 
-1. Create a database on your hosting.
+1. Create a database and an e-mail box on your hosting.
 2. Fill in the settings file with the right credentials for your database in `Server\config.template.php` and save it as `Server\config.php`.
 3. Create a `Server\.htpasswd` file with your desired user name and password (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd).
 4. Upload the content of `Server` onto your server.

@@ -21,7 +21,7 @@ Použité součástky:
 
 Ardularm byl vytvořen pomocí Arduino IDE (kód pro Arduino) a dalším editorem (pro serverovou část, PHP kód). Knihovny [AddicoreRFID](http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip)* a [Bootstrap framework](http://getbootstrap.com/) byly využity při vývoji. Pro instalaci projektu je potřeba:
 
-1. Vytvořte databázi na vašem hostingu.
+1. Vytvořte databázi a e-mailovou schránku na vašem hostingu.
 2. Upravte a vyplňte `Server\config.template.php` a uložte soubor jako `Server\config.php`.
 3. Vytvořte soubor `Server\.htpasswd` se zvoleným uživatelským jménem a heslem (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd).
 4. Nahrajte obsah adresáře `Server` na server.
