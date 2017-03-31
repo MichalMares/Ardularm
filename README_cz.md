@@ -21,15 +21,16 @@ Použité součástky:
 
 Ardularm byl vytvořen pomocí Arduino IDE (kód pro Arduino) a dalším editorem (pro serverovou část, PHP kód). Knihovny [AddicoreRFID](http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip)* a [Bootstrap framework](http://getbootstrap.com/) byly využity při vývoji. Pro instalaci projektu je potřeba:
 
-1. Upravte a vyplňte `Server\config.template.php` a uložte soubor jako `Server\config.php`.
-2. Vytvořte soubor `Server\.htpasswd` se zvoleným uživatelským jménem a heslem (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd).
-3. Nahrajte obsah adresáře `Server` na server.
-4. Spusťte `Server\create.php`. Tím automaticky vytvoříte tabulky databáze potřebné pro fungování Ardularmu.
-5. Zapojte vaše Arduino UNO podle sekce "Komponenty a zapojení".
-6. Vyplňte proměnné v `Arduino\Ardularm\Ardularm.ino` pod komentářem "user-configurable".
-7. Nahrajte `Arduino\Ardularm\Ardularm.ino` na vaše Arduino UNO prostřednictvím Arduino IDE.
-8. Opakujte kroky 5, 6, 7 pro každé zařízení, které si přejete připojit.
-9. Užívejte si pocit bezpečí.
+1. Vytvořte databázi na vašem hostingu.
+2. Upravte a vyplňte `Server\config.template.php` a uložte soubor jako `Server\config.php`.
+3. Vytvořte soubor `Server\.htpasswd` se zvoleným uživatelským jménem a heslem (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd).
+4. Nahrajte obsah adresáře `Server` na server.
+5. Spusťte `Server\create.php`. Tím automaticky vytvoříte tabulky databáze potřebné pro fungování Ardularmu.
+6. Zapojte vaše Arduino UNO podle sekce "Komponenty a zapojení".
+7. Vyplňte proměnné v `Arduino\Ardularm\Ardularm.ino` pod komentářem "user-configurable".
+8. Nahrajte `Arduino\Ardularm\Ardularm.ino` na vaše Arduino UNO prostřednictvím Arduino IDE.
+9. Opakujte kroky 6, 7, 8 pro každé zařízení, které si přejete připojit.
+10. Užívejte si pocit bezpečí.
 
 \* Knihovna AddicoreRFID musela být modifikována, aby fungovala paralelně s Ethernet Shield.
 
