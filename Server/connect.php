@@ -3,6 +3,7 @@
 	 * @file connect.php
 	 * @Author Michal Mareš
 	 * @date March, 2017
+	 * @brief Connects to the database.
 	 */
 
 	/**

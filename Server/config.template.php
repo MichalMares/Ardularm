@@ -3,7 +3,7 @@
 	 * @file config.php
 	 * @Author Michal Mareš
 	 * @date March, 2017
-	 * @brief This script contains all the user-configurable variables.
+	 * @brief Contains all the user-configurable variables.
 	 */
 
 	class Config {
@@ -20,19 +20,19 @@
 		/// Key (has to be the same as in Arduino code).
 		const key = 'key';
 
-		/// Mailbox host.
-		const mailHost = '*****.***;';
-		/// Mailbox name.
+		/// Specify main and backup SMTP servers. (Most of the time, one is enough. In that case, leave it as "*****.***;".)
+		const mailHost = '*****.***; *****.***';
+		/// SMTP username. From this address notifications will be sent.
 		const mailUsername = 'usr@domain.tld';
-		/// Mailbox password.
+		/// SMTP password.
 		const mailPassword = 'pass';
 		/// Ardularm address (has to be the same as mailbox name, DO NOT CHANGE).
 		const mailSetFromAddress = self::mailUsername;
 		/// Sender's name (can be changed).
 		const mailSetFromName = 'Ardularm';
-		/// Owner's address.
+		/// Recipient's address (owner). This is where the notifications will be sent.
 		const mailaddAddressAddress = 'to@domain.tld';
-		/// Owner's name.
+		/// Recipient's address (owner).
 		const mailaddAddressName = 'name';
 	}
 ?>

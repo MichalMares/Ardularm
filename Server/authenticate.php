@@ -3,6 +3,7 @@
 	 * @file authenticate.php
 	 * @Author Michal Mareš
 	 * @date March, 2017
+	 * @brief Authenticates the request.
 	 */
 
 	/**
