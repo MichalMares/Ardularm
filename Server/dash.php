@@ -16,7 +16,7 @@
 
             <ul class="nav navbar-nav">
               <li><a href="index.php">Domů</a></li>
-              <li><a href="docs.php">Dokumentace</a></li>
+              <li><a href="/DoxyDoc/">Vývojářská dokumentace</a></li>
               <li class="active"><a href="dash.php">Uživatel</a></li>
             </ul>
           </div><!--/.nav-collapse -->
