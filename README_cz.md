@@ -6,7 +6,7 @@ Ardularm je projekt, který se zabývá vytvořením levného domácího alarmu 
 
 Schéma zapojení:
 
-![Wiring](wiring.png)
+![Wiring](doc-images/wiring.png)
 
 Použité součástky:
 * Arduino UNO Rev3
