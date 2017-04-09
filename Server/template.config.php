@@ -32,7 +32,7 @@
 		const mailSetFromName = 'Ardularm';
 		/// Recipient's address (owner). This is where the notifications will be sent.
 		const mailaddAddressAddress = 'to@domain.tld';
-		/// Recipient's address (owner).
+		/// Recipient's name.
 		const mailaddAddressName = 'name';
 	}
 ?>
