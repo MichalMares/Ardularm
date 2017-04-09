@@ -6,6 +6,7 @@
 	 * @brief Creates necessary tables in database to run Ardularm.
 	 */
 
+	include("config.php");
 	include("connect.php");
 	$handler = Connection();
 

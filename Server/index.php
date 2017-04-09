@@ -16,10 +16,13 @@
 
 <h1>Ardularm</h1>
 <p>Ardularm je projekt, který se zabývá vytvořením levného domácího alarmu prostřednictvím platformy Arduino.</p>
+<a href="https://github.com/MichalMares/Ardularm">Repozitář na GitHubu</a>
+
 <h2>Komponenty a zapojení</h2>
 
 <p>Schéma zapojení:</p>
 <p><img src="DoxyDoc/wiring.png" alt="Wiring" width=100%/></p>
+
 <p>Použité součástky:</p>
 <ul>
 <li><p>Arduino UNO Rev3</p></li>
@@ -28,14 +31,14 @@
 <li><p>Passive Infrared Sensor HC-SR501 </p></li>
 <li><p>Generic RGB Diode</p></li>
 </ul>
-<p>Jiné součástky mohou také fungovat (netestováno.)</p>
+<p>Jiné součástky mohou také fungovat (netestováno).</p>
 
 <h2>Instalace</h2>
 <p>Ardularm byl vytvořen pomocí Arduino IDE (kód pro Arduino) a dalším editorem (pro serverovou část, PHP kód). Knihovny <a href="http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip">AddicoreRFID</a>* a <a href="http://getbootstrap.com/">Bootstrap framework</a> byly využity při vývoji. Pro instalaci projektu je potřeba:</p>
 <ol>
 <li><p>Vytvořte databázi a e-mailovou schránku na vašem hostingu.</p></li>
-<li><p>Upravte a vyplňte <code>Server\config.template.php</code> a uložte soubor jako <code>Server\config.php</code>.</p></li>
-<li><p>Vytvořte soubor <code>Server\.htpasswd</code> se zvoleným uživatelským jménem a heslem (<a href="https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd">https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd</a>). Zabezpečení přes htaccess platí pouze pro servery Apache!</p></li>
+<li><p>Upravte a vyplňte <code>Server\template.config.php</code> a uložte soubor jako <code>Server\config.php</code>.</p></li>
+<li><p>Vytvořte soubor <code>Server\.htpasswd</code> se zvoleným uživatelským jménem a heslem (<a href="https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd">https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd</a>), přepište cestu v <code>Server\template.htaccess</code> a uložte soubor jako <code>.htaccess</code>. Zabezpečení přes htaccess platí pouze pro servery Apache!</p></li>
 <li><p>Nahrajte obsah adresáře <code>Server</code> na server.</p></li>
 <li><p>Spusťte <code>Server\create.php</code>. Tím automaticky vytvoříte tabulky databáze potřebné pro fungování Ardularmu.</p></li>
 <li><p>Zapojte vaše Arduino UNO podle sekce &quot;Komponenty a zapojení&quot;.</p></li>

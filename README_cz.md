@@ -1,6 +1,7 @@
 # Ardularm
 
-Ardularm je projekt, který se zabývá vytvořením levného domácího alarmu prostřednictvím platformy Arduino.
+Ardularm je projekt, který se zabývá vytvořením levného domácího alarmu prostřednictvím platformy Arduino.   
+[Repozitář na GitHubu](https://github.com/MichalMares/Ardularm)
 
 ## Komponenty a zapojení
 
@@ -15,15 +16,15 @@ Použité součástky:
 * Passive Infrared Sensor HC-SR501 
 * Generic RGB Diode
 
-Jiné součástky mohou také fungovat (netestováno.)
+Jiné součástky mohou také fungovat (netestováno).
 
 ## Instalace
 
 Ardularm byl vytvořen pomocí Arduino IDE (kód pro Arduino) a dalším editorem (pro serverovou část, PHP kód). Knihovny [AddicoreRFID](http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip)* a [Bootstrap framework](http://getbootstrap.com/) byly využity při vývoji. Pro instalaci projektu je potřeba:
 
 1. Vytvořte databázi a e-mailovou schránku na vašem hostingu.
-2. Upravte a vyplňte `Server\config.template.php` a uložte soubor jako `Server\config.php`.
-3. Vytvořte soubor `Server\.htpasswd` se zvoleným uživatelským jménem a heslem (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd). Zabezpečení přes htaccess platí pouze pro servery Apache!
+2. Upravte a vyplňte `Server\template.config.php` a uložte soubor jako `Server\config.php`.
+3. Vytvořte soubor `Server\.htpasswd` se zvoleným uživatelským jménem a heslem (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd), přepište cestu v `Server\template.htaccess` a uložte soubor jako `.htaccess`. Zabezpečení přes htaccess platí pouze pro servery Apache!
 4. Nahrajte obsah adresáře `Server` na server.
 5. Spusťte `Server\create.php`. Tím automaticky vytvoříte tabulky databáze potřebné pro fungování Ardularmu.
 6. Zapojte vaše Arduino UNO podle sekce "Komponenty a zapojení".

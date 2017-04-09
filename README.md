@@ -1,6 +1,7 @@
 # Ardularm
 
-Ardularm is a proof-of-concept project which focuses on making an inexpensive alarm based on the Arduino platform.
+Ardularm is a proof-of-concept project which focuses on making an inexpensive alarm based on the Arduino platform.   
+[GitHub Repository](https://github.com/MichalMares/Ardularm)
 
 ## Components and Wiring
 
@@ -8,7 +9,7 @@ Scheme:
 
 ![Wiring](doc-images/wiring.png)
 
-You can also view this scheme in the Fritzing programme (`Ardularm (wiring).fzz`).
+You can also view this scheme in the Fritzing programme (`Wiring.fzz`).
 
 Used components:
 * Arduino UNO Rev3
@@ -17,15 +18,15 @@ Used components:
 * Passive Infrared Sensor HC-SR501 
 * Generic RGB Diode
 
-Other components might work as well (not tested.)
+Other components might work as well (not tested).
 
 ## Installation
 
 Ardularm had been developed with Arduino IDE (for the Arduino code) and any other editor (for the server-side PHP code). Libraries [AddicoreRFID](http://www.addicore.com/v/vspfiles/downloadables/Product%20Downloadables/RFID_RC522/AddicoreRFID.zip)* and [Bootstrap framework](http://getbootstrap.com/) were used while creating this. To run this project on your own, there are a few steps necessary:
 
 1. Create a database and an e-mail box on your hosting.
-2. Fill in the settings file with the right credentials for your database in `Server\config.template.php` and save it as `Server\config.php`.
-3. Create a `Server\.htpasswd` file with your desired user name and password (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd). ".htaccess" works for Apache servers only!
+2. Fill in the settings file with the right credentials for your database in `Server\template.config.php` and save it as `Server\config.php`.
+3. Create a `Server\.htpasswd` file with your desired user name and password (https://faq.oit.gatech.edu/content/how-do-i-do-basicauth-using-htaccess-and-htpasswd), edit path in `Server\template.htaccess` file and save it as `.htaccess`. ".htaccess" works for Apache servers only!
 4. Upload the content of `Server` onto your server.
 5. Run the `Server\create.php` script. This will create all the tables needed for the project and necessary values.
 6. Wire up your Arduino UNO according to "Components and Wiring" section of this document.
@@ -68,12 +69,19 @@ When done correctly, final product should look something like this:
 
 The PIR sensor should face the area you want to secure and RFID reader with LED should be accessable without entering it. Of course, wires can be lengthened and mechanically protected in order to achieve this result.
 
-## Possible Extensions
+## For Developers
 
-Code posted here can be further developed. Possible extensions include:
-* Modify code to work on other Arduino boards (pins must be changed according to the unit in `Arduino.ino`)
-* Buzzer extension (edit `Arduino.ino`)
-* WiFi extension (edit `Arduino.ino`)
+Ardularm consists of three main parts.   
+The first one is the code for Arduino unit (`Arduino\Ardularm\Ardularm.ino`), which works just like any other Arduino sketch - there is a setup() method which runs once and loop() method, which cycles for the rest of the time, running the code and calling the other methods.   
+Second are the API's, which take care of the communication between Arduino and the database (`Server\api\`).   
+Last is the dashboard (`Server\dash.php`) which shows the log to the user and enables some basic sorting and changing the name of the cards (`Server\user.php`).
+
+In-depth documentation can be found in `Server\DoxyDoc\`.
+
+Code posted here can be further developed.   
+If you would like to make it work on a different Arduino board, change pin definitions at the beginning of `Arduino\Ardularm\Arduino.ino`. Mainly, SPI pins (which are pre-defined) must be changed and then connected accordingly.   
+Buzzer extension is also possible: add a tone(pin, frequency) method into the `if (digitalRead(pirPin) == HIGH)` block of code and noTone() after it. [Documentation of tone()](https://www.arduino.cc/en/reference/tone)   
+To send a SMS alert instead of an email, you will need something like a GSM/GPRS Shield. Instead of calling `post("sendMail", "");` in `if (digitalRead(pirPin) == HIGH)` block, you will then use sms.print() method to send a SMS according to the [official tutorial](https://www.arduino.cc/en/Tutorial/GSMExamplesSendSMS) on sending SMS.
 
 ## License
 
