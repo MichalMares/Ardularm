@@ -1,3 +1,4 @@
 /Server/config.php
 /Server/DoxyDoc/*
 /Server/.htpasswd
+/Server/.htaccess
