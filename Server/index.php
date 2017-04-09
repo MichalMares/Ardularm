@@ -16,7 +16,7 @@
 
 <h1>Ardularm</h1>
 <p>Ardularm je projekt, který se zabývá vytvořením levného domácího alarmu prostřednictvím platformy Arduino.</p>
-<a href="https://github.com/MichalMares/Ardularm">Repozitář na GitHubu</a>
+<p><a href="https://github.com/MichalMares/Ardularm">Repozitář na GitHubu</a><p>
 
 <h2>Komponenty a zapojení</h2>
 
