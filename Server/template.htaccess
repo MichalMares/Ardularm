@@ -1,5 +1,5 @@
 <Files "dash.php">
-    AuthUserFile /data/web/virtuals/154501/virtual/www/subdom/ardularm/.htpasswd
+    AuthUserFile /absolute/path/.htpasswd
     AuthName "Restricted Access"
     AuthType Basic
     AuthBasicProvider file
