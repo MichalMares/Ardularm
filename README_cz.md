@@ -65,7 +65,7 @@ Při správném postupu by měl konečný výtvor vypadat podobně:
 ![Back](doc-images/back.jpg)
 ![Inside](doc-images/inside.jpg)
 
-Infračervený sensor by měl směřovat do prostoru, který si přejete zajistit, RFID čtečka spolu s LED by pak měla být přístupná bez narušení tohoto prostoru. Vodiče mohou být samozřejmě prodlouženy a mechanicky chráněny pro dosažení takového výsledku.
+Infračervený senzor by měl směřovat do prostoru, který si přejete zajistit, RFID čtečka spolu s LED by pak měla být přístupná bez narušení tohoto prostoru. Vodiče mohou být samozřejmě prodlouženy a mechanicky chráněny pro dosažení takového výsledku.
 
 ## Licence
 
